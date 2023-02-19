@@ -1,0 +1,9 @@
+.container {
+    display: block;
+    height: 10rem !important;
+    width: 60% !important;
+}
+
+#questionModal {
+    font-size: large !important;
+}
