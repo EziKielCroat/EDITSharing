@@ -1,0 +1,37 @@
+#addIcon {
+    font-size: x-large !important;
+}
+
+#questionIcon {
+    font-size: large !important;
+}
+
+.container {
+    width: 100%;
+    height: auto;
+}
+
+#drag-drop {
+    padding: 10px;
+    border: 2px dashed #bbb;
+    background-color: #eee;
+    width: 300px;
+    height: 100px;
+    text-align: center;
+    font-size: 18px;
+}
+
+.input-holder {
+    height: 15rem;
+    width: 25rem;
+    padding: 1rem;
+    clear: both;
+    display: none;
+    margin-top: 5rem;
+    border: 1px solid #cfd8dc;
+    border-radius: 0.5rem;
+}
+
+#drag-drop {
+    margin-bottom: 0.5rem;
+}

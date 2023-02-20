@@ -66,10 +66,6 @@ function glavnaAplikacija() {
     alert("OK!"); // ovdje ide glavna aplikacija
 }
 
-  
-
-
-
   // Otvaranje Question Modala ako korisnika zanima što i kako naša aplikacija osoba.
 function questionModal() {
     const elem = document.getElementById('modal1');
