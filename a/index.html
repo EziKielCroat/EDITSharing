@@ -17,12 +17,14 @@
         <li class="divider"></li>
         <li><a onclick="s2pMode()" href="#!">S2P</a></li>
       </ul>
+
       <nav>
         <div class="nav-wrapper red lighten-1">
           <a href="#!" class="brand-logo">YouShare</a>
           <ul class="right hide-on-med-and-down">
             <li><a class="dropdown-trigger" id="addIcon" href="#!" data-target="dropdown1">+<i class="material-icons right">arrow_drop_down</i></a></li>
             <li><a onclick="questionModal()" id="questionIcon">?</a></li>
+            <li><a onclick="accountModal()" id="accountIcon"><span class="material-icons">account_circle</span></a></li>           
         </ul>
         </div>
       </nav>
@@ -38,7 +40,28 @@
         </div>
       </div>
 
+      <div id="modal2" class="modal">
+        <div class="modal-content">
+          <h4>Postavke računa</h4>
+          <label for="promjenaImena">Promjeni korisničko ime:</label>
+          <input type="text" id="promjenaImena" name="promjenaImena" autocomplete="off">
+          <button onclick="promjeniIme()" id="promjeniIme" class="waves-effect red darken-1 btn">Promjeni</button> <br>
+          <label for="promjenaLozinke">Promjeni korisničku lozinku:</label>
+          <input type="password" id="promjenaLozinke" name="promjenaLozinke" autocomplete="off">
+          <button onclick="promjeniLozinku()" id="promjenaLozinke" class="waves-effect red darken-1 btn">Promjeni</button> <br>
+          <br>
+          <button class="waves-effect red darken-1 btn" id="signOut" onclick="signOut()">Odjava</button> 
+          </div>
+        <div class="modal-footer">
+          <a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a>
+        </div>
+      </div>
+
       <div class="container">
       </div>
+
+      <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-app-compat.js"></script>
+      <script src="https://www.gstatic.com/firebasejs/9.16.0/firebase-firestore-compat.js"></script>
+
 </body>
 </html>

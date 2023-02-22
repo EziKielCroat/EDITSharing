@@ -15,7 +15,16 @@ const db = app.firestore();
 let loginButton = document.getElementById("loginButton");
 let registerButton = document.getElementById("registerButton");
 
-  // Ulogiranje korisnika I izrada novog računa korisnika
+
+// cekiranje jel korisnik već ulogiran ako je prosljedi ga na glavnu app
+setTimeout(() => {
+    if(localStorage.getItem("idkorisnika") !== null) {
+      window.location.href = "/a/index.html";
+    }
+}, "100");
+
+
+// Ulogiranje korisnika I izrada novog računa korisnika
 
 loginButton.addEventListener("click", function() {
     let username = document.getElementById("username").value;
@@ -26,8 +35,7 @@ loginButton.addEventListener("click", function() {
             querySnapshot.forEach(doc => {
                 let obj = doc.data(); // obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
                 if (Object.keys(obj).length > 0) {
-                    glavnaAplikacija();
-                    console.log(obj); // ovdje ide logika za nastavit aplikaciju u dio di mos djelit dokumente
+                    glavnaAplikacija(doc.id);
                 } else {
                     alert("Račun sa upisanim korisničkim imenom i lozinkom ne postoji.")
                 }
@@ -42,34 +50,37 @@ registerButton.addEventListener("click", function() {
     let username = document.getElementById("username").value;
     let password = document.getElementById("password").value;
 
-    if(username.length > 0 && password.length > 0) {
+    if(username.length > 0 && password.length > 0) { 
         db.collection("Korisnici").add({
             username: `${username}`,
             password: `${password}`,
 
         }).then((docRef) => {
             // ovdi dodat logiku za nastavljanje aplikacije
-            glavnaAplikacija();
             console.log("Document written with ID: ", docRef.id);
+            glavnaAplikacija(docRef.id);
         })
         .catch((error) => {
             console.error("Error adding document: ", error);
         });
     } else {
-        alert("Upišite validno korisničko ime i lozinku.")
+         alert("Upišite validno korisničko ime i lozinku.")
     }
 });
 
 // Glavne funkcije
 
-function glavnaAplikacija() {
-    alert("OK!"); // ovdje ide glavna aplikacija
+function glavnaAplikacija(idKorisnika) {
+    // idKorisnika stavljan u webstorage tako da se moze provjerit u glavnoj app jel korisnik ulogiran
+    localStorage.setItem("idkorisnika", idKorisnika);
+
+    window.location.href = "/a/index.html";
 }
 
-  // Otvaranje Question Modala ako korisnika zanima što i kako naša aplikacija osoba.
-function questionModal() {
+// Pomoćne funkcije
+
+function questionModal() { // otvara modal definiran u htmlu
     const elem = document.getElementById('modal1');
     const instance = M.Modal.init(elem, {dismissible: false});
     instance.open();
 }
-
