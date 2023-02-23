@@ -1,3 +1,4 @@
+M.AutoInit();
 
 const firebaseConfig = {
     apiKey: "AIzaSyBynaVPHtPVT2u33R9Du3wJaWs694Cvi4w",
@@ -18,11 +19,10 @@ let registerButton = document.getElementById('registerButton');
 
 // cekiranje jel korisnik već ulogiran ako je prosljedi ga na glavnu app
 setTimeout(() => {
-    if(localStorage.getItem('idkorisnika') !== null) {
-      window.location.href = '/a/index.html';
+    if (localStorage.getItem('idkorisnika') !== null) {
+        window.location.href = '/a/index.html';
     }
 }, '100');
-
 
 // Ulogiranje korisnika I izrada novog računa korisnika
 
@@ -30,7 +30,7 @@ loginButton.addEventListener('click', function() {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
-    if(username.length > 0 && password.length > 0) {
+    if (username.length > 0 && password.length > 0) {
         db.collection('Korisnici').where('username', '==', `${username}`).where('password', '==', `${password}`).get().then((querySnapshot) => {
             querySnapshot.forEach(doc => {
                 let obj = doc.data(); // obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
@@ -50,21 +50,20 @@ registerButton.addEventListener('click', function() {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
-    if(username.length > 0 && password.length > 0) { 
+    if (username.length > 0 && password.length > 0) {
         db.collection('Korisnici').add({
-            username: `${username}`,
-            password: `${password}`,
+                username: `${username}`,
+                password: `${password}`,
 
-        }).then((docRef) => {
-            // ovdi dodat logiku za nastavljanje aplikacije
-            console.log('Document written with ID: ', docRef.id);
-            glavnaAplikacija(docRef.id);
-        })
-        .catch((error) => {
-            console.error('Error adding document: ', error);
-        });
+            }).then((docRef) => {
+                console.log('Document written with ID: ', docRef.id);
+                glavnaAplikacija(docRef.id);
+            })
+            .catch((error) => {
+                console.error('Error adding document: ', error);
+            });
     } else {
-         alert('Upišite validno korisničko ime i lozinku.')
+        alert('Upišite validno korisničko ime i lozinku.')
     }
 });
 
@@ -81,6 +80,8 @@ function glavnaAplikacija(idKorisnika) {
 
 function questionModal() { // otvara modal definiran u htmlu
     const elem = document.getElementById('modal1');
-    const instance = M.Modal.init(elem, {dismissible: false});
+    const instance = M.Modal.init(elem, {
+        dismissible: false
+    });
     instance.open();
 }
