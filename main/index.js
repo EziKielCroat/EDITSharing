@@ -1,7 +1,5 @@
 M.AutoInit();
 
-console.log(localStorage.getItem('idkorisnika'));
-
 const firebaseConfig = {
   apiKey: "AIzaSyBynaVPHtPVT2u33R9Du3wJaWs694Cvi4w",
   authDomain: "editsharing-38e1f.firebaseapp.com",
@@ -14,23 +12,24 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
+const userID = localStorage.getItem('idkorisnika');
+let mode = '';
 
+// pregledavam jel korisnik ulogiran 
 setTimeout(() => {
-  if(localStorage.getItem('idkorisnika') == null) {
+  if(userID == null) {
     window.location.href = '/';
   }
 }, '100');
 
-let mode = '';
-
+// logika za input prozor
 function inputFunctions() {
-  // sva logika za input prozor
+  
 const dropzone = document.getElementById('drag-drop');
 
 dropzone.addEventListener('click', () => {
   const input = document.createElement('input');
   input.type = 'file';
-  input.accept = '.zip,.rar,.7z,.tar,.gz,.gzip';
   input.onchange = (e) => {
     handleFiles(e.target.files);
   };
@@ -47,33 +46,27 @@ dropzone.addEventListener('dragover', (event) => {
 });
 }
 
+// uzme sve moguće fileove i djeli ih na odredene funkcije (odrene od varijable mode)
+function handleFiles(files) {
+  const file = files[0];
 
-function handleFiles(files) { // mode je varijabla koju san stavija cisto da nepisen zasbne funkcije za sve 
-if(mode == 'p2p') {
-    if (files.length > 0) {
-        const file = files[0];
-          document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
-          document.getElementById('submitButton').classList.remove('disabled');
-          p2pHandler(file);
-      }
-} else if(mode == 's2p') {
-    if (files.length > 0) {
-        const file = files[0];
+  if(files.length > 0) {
+    if(mode == 'p2p') {
             document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
             document.getElementById('submitButton').classList.remove('disabled');
-            s2pHandler(file);
-      }
-} else {
-    alert('Kritična pogreška.');
-    window.location.reload()
-}
+            p2pHandler(file);
+    } else if(mode == 's2p') {
+              document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
+              document.getElementById('submitButton').classList.remove('disabled');
+              s2pHandler(file);
+    } else { // nebi trebalo fireat al ako se desi eto
+      alert('Kritična pogreška, mode nije definiran.');
+      window.location.reload()
+    }
+  }
 }
 
 // Početak aplikacije
-
-function p2pHandler(file) {
-
-}
 
 function s2pHandler(file) {
 
@@ -81,9 +74,10 @@ function s2pHandler(file) {
 
 // Pomoćne funkcije
 
-//Obije funkcije samo daju mode varijabli vrijednost i appenda input stvar
+//Obije funkcije samo daju mode varijabli vrijednost i appenda input prozor
 function p2pMode() {
     mode = 'p2p';
+
     let inputHolder = document.createElement('div');
     inputHolder.setAttribute('class', 'input-holder');
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
@@ -96,15 +90,18 @@ function p2pMode() {
 
 function s2pMode() {
     mode = 's2p';
+
     let inputHolder = document.createElement('div');
     inputHolder.setAttribute("class", "input-holder");
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
+
     inputFunctions();
+
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
 }
 
-// otvara question modal // refactorat modal mozda
+// mozda opet napravi question modal
 function questionModal() {
   const elem = document.getElementById('modal1');
   const instance = M.Modal.init(elem, {dismissible: false});
@@ -127,7 +124,7 @@ function promjeniIme() {
   let usernameNew = document.getElementById('promjenaImena').value;
 
   if(usernameNew.length > 0) {
-    db.collection('Korisnici').doc(localStorage.getItem('idkorisnika')).update({
+    db.collection('Korisnici').doc(userID).update({
       username: `${usernameNew}`
     });
     document.getElementById('promjenaImena').value == '';
@@ -142,12 +139,11 @@ function promjeniLozinku() {
   let passwordNew = document.getElementById('promjenaLozinke').value;
 
   if(passwordNew.length > 0) {
-    db.collection('Korisnici').doc(localStorage.getItem('idkorisnika')).update({
+    db.collection('Korisnici').doc(userID).update({
       password: `${passwordNew}`
     });
     document.getElementById('promjenaLozinke').value == '';
-    
-  }else {
+  } else {
     alert('Upišite validno prezime');
     document.getElementById('promjenaLozinke').value == '';
   }

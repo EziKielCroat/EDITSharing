@@ -12,59 +12,59 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
 
-let loginButton = document.getElementById("loginButton");
-let registerButton = document.getElementById("registerButton");
+let loginButton = document.getElementById('loginButton');
+let registerButton = document.getElementById('registerButton');
 
 
 // cekiranje jel korisnik već ulogiran ako je prosljedi ga na glavnu app
 setTimeout(() => {
-    if(localStorage.getItem("idkorisnika") !== null) {
-      window.location.href = "/a/index.html";
+    if(localStorage.getItem('idkorisnika') !== null) {
+      window.location.href = '/a/index.html';
     }
-}, "100");
+}, '100');
 
 
 // Ulogiranje korisnika I izrada novog računa korisnika
 
-loginButton.addEventListener("click", function() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+loginButton.addEventListener('click', function() {
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
 
     if(username.length > 0 && password.length > 0) {
-        db.collection("Korisnici").where("username", "==", `${username}`).where("password", "==", `${password}`).get().then((querySnapshot) => {
+        db.collection('Korisnici').where('username', '==', `${username}`).where('password', '==', `${password}`).get().then((querySnapshot) => {
             querySnapshot.forEach(doc => {
                 let obj = doc.data(); // obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
                 if (Object.keys(obj).length > 0) {
                     glavnaAplikacija(doc.id);
                 } else {
-                    alert("Račun sa upisanim korisničkim imenom i lozinkom ne postoji.")
+                    alert('Račun sa upisanim korisničkim imenom i lozinkom ne postoji.')
                 }
             })
         });
     } else {
-        alert("Upišite validno korisničko ime i lozinku.");
+        alert('Upišite validno korisničko ime i lozinku.');
     }
 });
 
-registerButton.addEventListener("click", function() {
-    let username = document.getElementById("username").value;
-    let password = document.getElementById("password").value;
+registerButton.addEventListener('click', function() {
+    let username = document.getElementById('username').value;
+    let password = document.getElementById('password').value;
 
     if(username.length > 0 && password.length > 0) { 
-        db.collection("Korisnici").add({
+        db.collection('Korisnici').add({
             username: `${username}`,
             password: `${password}`,
 
         }).then((docRef) => {
             // ovdi dodat logiku za nastavljanje aplikacije
-            console.log("Document written with ID: ", docRef.id);
+            console.log('Document written with ID: ', docRef.id);
             glavnaAplikacija(docRef.id);
         })
         .catch((error) => {
-            console.error("Error adding document: ", error);
+            console.error('Error adding document: ', error);
         });
     } else {
-         alert("Upišite validno korisničko ime i lozinku.")
+         alert('Upišite validno korisničko ime i lozinku.')
     }
 });
 
@@ -72,9 +72,9 @@ registerButton.addEventListener("click", function() {
 
 function glavnaAplikacija(idKorisnika) {
     // idKorisnika stavljan u webstorage tako da se moze provjerit u glavnoj app jel korisnik ulogiran
-    localStorage.setItem("idkorisnika", idKorisnika);
+    localStorage.setItem('idkorisnika', idKorisnika);
 
-    window.location.href = "/a/index.html";
+    window.location.href = '/main/index.html';
 }
 
 // Pomoćne funkcije
