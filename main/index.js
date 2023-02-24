@@ -10,17 +10,19 @@ const firebaseConfig = {
     measurementId: "G-40DV23GZLC"
 };
 
+// incijalizacija svega
+
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
 const userID = localStorage.getItem('idkorisnika');
-let mode = '';
+let sharingMode = '';
 
-// pregledavam jel korisnik ulogiran 
-setTimeout(() => {
+// pregledavanje jeli korisnik 'ulogiran'
+window.onload = function () {
     if (userID === null) {
         window.location.href = '/first.html';
     }
-}, '100');
+}
 
 // logika za input prozor
 function inputFunctions() {
@@ -46,76 +48,24 @@ function inputFunctions() {
     });
 }
 
-// uzme sve moguće fileove i djeli ih na odredene funkcije (odrene od varijable mode)
+// djeli fileove na svoje odredene funkcije(odrene od sharingmode variable)
 function handleFiles(files) {
     const file = files[0];
 
     if (files.length > 0) {
-        if (mode === 'p2p') {
+        if (sharingMode === 'p2p') {
             document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
             document.getElementById('submitButton').classList.remove('disabled');
             p2pHandler(file);
-        } else if (mode === 's2p') {
+        } else if (sharingMode === 's2p') {
             document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
             document.getElementById('submitButton').classList.remove('disabled');
             s2pHandler(file);
         } else { // nebi trebalo fireat al ako se desi eto
-            alert('Kritična pogreška, mode nije definiran.');
+            errorDisplay('Kritična pogreška, mode nije definiran.');
             window.location.reload()
         }
     }
-}
-
-// Pomoćne funkcije
-
-//Obije funkcije samo daju mode varijabli vrijednost i appenda input prozor
-function p2pMode() {
-    mode = 'p2p';
-
-    let inputHolder = document.createElement('div');
-    inputHolder.setAttribute('class', 'input-holder');
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
-    document.getElementsByClassName('container')[0].appendChild(inputHolder);
-
-    inputFunctions();
-
-    document.getElementsByClassName('input-holder')[0].style.display = 'block';
-}
-
-function s2pMode() {
-    mode = 's2p';
-
-    let inputHolder = document.createElement('div');
-    inputHolder.setAttribute("class", "input-holder");
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
-    document.getElementsByClassName("container")[0].appendChild(inputHolder);
-
-    inputFunctions();
-
-    document.getElementsByClassName('input-holder')[0].style.display = 'block';
-}
-
-// mozda opet napravi question modal
-function questionModal() {
-    const elem = document.getElementById('modal1');
-    const instance = M.Modal.init(elem, {
-        dismissible: false
-    });
-    instance.open();
-}
-
-
-function accountModal() {
-    const elem = document.getElementById('modal2');
-    const instance = M.Modal.init(elem, {
-        dismissible: false
-    });
-    instance.open();
-}
-
-function signOut() {
-    localStorage.removeItem('idkorisnika');
-    window.location.href = '/index.html';
 }
 
 function promjeniIme() {
@@ -128,7 +78,7 @@ function promjeniIme() {
         document.getElementById('promjenaImena').value = '';
 
     } else {
-        alert('Upišite validno ime');
+        errorDisplay('Upišite validno ime');
         document.getElementById('promjenaImena').value = '';
     }
 }
@@ -142,7 +92,61 @@ function promjeniLozinku() {
         });
         document.getElementById('promjenaLozinke').value = '';
     } else {
-        alert('Upišite validno prezime');
+        errorDisplay('Upišite validno prezime');
         document.getElementById('promjenaLozinke').value = '';
     }
+}
+
+function p2pMode() { // priprema p2p mode i otvara prozor za input datoteka
+    sharingMode = 'p2p';
+
+    let inputHolder = document.createElement('div');
+    inputHolder.setAttribute('class', 'input-holder');
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
+    document.getElementsByClassName('container')[0].appendChild(inputHolder);
+
+    inputFunctions();
+
+    document.getElementsByClassName('input-holder')[0].style.display = 'block';
+}
+
+function s2pMode() { // priprema s2p mode i otvara prozor za input datoteka
+    sharingMode = 's2p';
+
+    let inputHolder = document.createElement('div');
+    inputHolder.setAttribute("class", "input-holder");
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
+    document.getElementsByClassName("container")[0].appendChild(inputHolder);
+
+    inputFunctions();
+
+    document.getElementsByClassName('input-holder')[0].style.display = 'block';
+}
+
+// pomocne funkcije
+
+// mozda opet napravit question modal
+
+function openModal(modal) {
+    const elem = document.getElementById(modal);
+    const instance = M.Modal.init(elem, {
+        dismissible: false
+    });
+    instance.open();
+}
+
+function errorDisplay(msg) {
+    let errorHolder = document.createElement("div");
+
+    errorHolder.setAttribute("class", "error-holder");
+
+    errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
+    document.getElementsByClassName("container")[0].appendChild(errorHolder);
+
+    openModal('modalError');
+}
+
+function signOut() {
+    localStorage.removeItem('idkorisnika');
+    window.location.href = '/first.html';
 }

@@ -13,20 +13,20 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
 
-let loginButton = document.getElementById('loginButton');
-let registerButton = document.getElementById('registerButton');
-
+const loginButton = document.getElementById('loginButton');
+const registerButton = document.getElementById('registerButton');
 
 // cekiranje jel korisnik već ulogiran ako je prosljedi ga na glavnu app
-setTimeout(() => {
+
+window.onload = function () {
     if (localStorage.getItem('idkorisnika') !== null) {
-        window.location.href = '/a/index.html';
+        window.location.href = '/main/index.html';
     }
-}, '100');
+}
 
-// Ulogiranje korisnika I izrada novog računa korisnika
+// Ulogiranje korisnika
 
-loginButton.addEventListener('click', function() {
+loginButton.addEventListener('click', () => {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
@@ -37,16 +37,18 @@ loginButton.addEventListener('click', function() {
                 if (Object.keys(obj).length > 0) {
                     glavnaAplikacija(doc.id);
                 } else {
-                    alert('Račun sa upisanim korisničkim imenom i lozinkom ne postoji.')
+                    errorDisplay('Račun sa upisanim korisničkim imenom i lozinkom ne postoji.')
                 }
             })
         });
     } else {
-        alert('Upišite validno korisničko ime i lozinku.');
+        errorDisplay('Upišite validno korisničko ime i lozinku.');
     }
 });
 
-registerButton.addEventListener('click', function() {
+// izrada računa // mozda dodaj da nemogu bit vise korisnika s istin imenom
+
+registerButton.addEventListener('click', () => {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
 
@@ -60,28 +62,34 @@ registerButton.addEventListener('click', function() {
                 glavnaAplikacija(docRef.id);
             })
             .catch((error) => {
-                console.error('Error adding document: ', error);
+                errorDisplay('Error adding document: ', error);
             });
     } else {
-        alert('Upišite validno korisničko ime i lozinku.')
+        errorDisplay('Upišite validno korisničko ime i lozinku.')
     }
 });
 
-// Glavne funkcije
-
 function glavnaAplikacija(idKorisnika) {
-    // idKorisnika stavljan u webstorage tako da se moze provjerit u glavnoj app jel korisnik ulogiran
-    localStorage.setItem('idkorisnika', idKorisnika);
+    localStorage.setItem('idkorisnika', idKorisnika); // u localstorage je spremljen id korisnika koji se posli korsiti za pregled jel korisnik ulogiran
 
-    window.location.href = '/main/index.html';
+    window.location.href = '/main/index.html'; // redirect na glavni app
 }
 
-// Pomoćne funkcije
-
-function questionModal() { // otvara modal definiran u htmlu
-    const elem = document.getElementById('modal1');
+function openModal(modal) {
+    const elem = document.getElementById(modal);
     const instance = M.Modal.init(elem, {
         dismissible: false
     });
     instance.open();
+}
+
+function errorDisplay(msg) {
+    let errorHolder = document.createElement("div");
+
+    errorHolder.setAttribute("class", "error-holder");
+
+    errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
+    document.getElementsByClassName("container")[0].appendChild(errorHolder);
+
+    openModal('modalError');
 }
