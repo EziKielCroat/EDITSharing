@@ -15,6 +15,7 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
 const userID = localStorage.getItem('idkorisnika');
+const ref = app.storage().ref()
 let sharingMode = '';
 
 // pregledavanje jeli korisnik 'ulogiran'
@@ -60,7 +61,7 @@ function handleFiles(files) {
         } else if (sharingMode === 's2p') {
             document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
             document.getElementById('submitButton').classList.remove('disabled');
-            s2pHandler(file);
+            s2pHandler(file,ref);
         } else { // nebi trebalo fireat al ako se desi eto
             errorDisplay('Kritična pogreška, mode nije definiran.');
             window.location.reload()
