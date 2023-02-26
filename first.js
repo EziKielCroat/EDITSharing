@@ -33,13 +33,14 @@ loginButton.addEventListener('click', () => {
     if (username.length > 0 && password.length > 0) {
         db.collection('Korisnici').where('username', '==', `${username}`).where('password', '==', `${password}`).get().then((querySnapshot) => {
             querySnapshot.forEach(doc => {
-                let obj = doc.data(); // obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
+                let obj = doc.data();
+                console.log("a");// obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
                 if (Object.keys(obj).length > 0) {
                     glavnaAplikacija(doc.id);
                 } else {
-                    errorDisplay('Račun sa upisanim korisničkim imenom i lozinkom ne postoji.')
+                    errorDisplay('Račun sa upisanim korisničkim imenom i lozinkom ne postoji.');
                 }
-            })
+            });
         });
     } else {
         errorDisplay('Upišite validno korisničko ime i lozinku.');

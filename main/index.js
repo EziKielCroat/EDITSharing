@@ -34,7 +34,15 @@ function inputFunctions() {
         const input = document.createElement('input');
         input.type = 'file';
         input.onchange = (e) => {
+           const files = e.target.files;
+           const file = files[0];
+           const submitButton = document.getElementById("submitButton");
+
+           document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
+           document.getElementById('submitButton').classList.remove('disabled');
+           submitButton.addEventListener("click", () => {
             handleFiles(e.target.files);
+           });
         };
         input.click();
     });
@@ -55,13 +63,11 @@ function handleFiles(files) {
 
     if (files.length > 0) {
         if (sharingMode === 'p2p') {
-            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
-            document.getElementById('submitButton').classList.remove('disabled');
             p2pHandler(file);
+            resetInput();
         } else if (sharingMode === 's2p') {
-            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
-            document.getElementById('submitButton').classList.remove('disabled');
             s2pHandler(file,ref);
+            resetInput();
         } else { // nebi trebalo fireat al ako se desi eto
             errorDisplay('Kritična pogreška, mode nije definiran.');
             window.location.reload()
@@ -150,4 +156,9 @@ function errorDisplay(msg) {
 function signOut() {
     localStorage.removeItem('idkorisnika');
     window.location.href = '/first.html';
+}
+
+function resetInput() {
+    document.getElementById("drag-drop").innerText = "Stisni ili ubaci datoteku koju želiš podjeliti";
+    document.getElementById('submitButton').classList.add('disabled');
 }
