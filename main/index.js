@@ -15,8 +15,11 @@ const firebaseConfig = {
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
 const userID = localStorage.getItem('idkorisnika');
-const ref = app.storage().ref()
+const ref = app.storage().ref();
 let sharingMode = '';
+
+let inputHolder = document.createElement('div');
+inputHolder.setAttribute("class", "input-holder");
 
 // pregledavanje jeli korisnik 'ulogiran'
 window.onload = function () {
@@ -29,6 +32,7 @@ window.onload = function () {
 function inputFunctions() {
 
     const dropzone = document.getElementById('drag-drop');
+    const connectButton = document.getElementById("connectButton");
 
     dropzone.addEventListener('click', () => {
         const input = document.createElement('input');
@@ -40,7 +44,8 @@ function inputFunctions() {
 
            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
            document.getElementById('submitButton').classList.remove('disabled');
-           submitButton.addEventListener("click", () => {
+           document.getElementById('connectButton').classList.remove('disabled');
+           submitButton.addEventListener('click', () => {
             handleFiles(e.target.files);
            });
         };
@@ -55,6 +60,10 @@ function inputFunctions() {
     dropzone.addEventListener('dragover', (event) => {
         event.preventDefault();
     });
+
+    connectButton.addEventListener('click', () => {
+        spajanjeKorisnika();
+    })
 }
 
 // djeli fileove na svoje odredene funkcije(odrene od sharingmode variable)
@@ -64,9 +73,10 @@ function handleFiles(files) {
     if (files.length > 0) {
         if (sharingMode === 'p2p') {
             p2pHandler(file);
+            console.log(1);
             resetInput();
         } else if (sharingMode === 's2p') {
-            s2pHandler(file,ref);
+            s2pHandler(file, ref);
             resetInput();
         } else { // nebi trebalo fireat al ako se desi eto
             errorDisplay('Kritična pogreška, mode nije definiran.');
@@ -107,9 +117,7 @@ function promjeniLozinku() {
 function p2pMode() { // priprema p2p mode i otvara prozor za input datoteka
     sharingMode = 'p2p';
 
-    let inputHolder = document.createElement('div');
-    inputHolder.setAttribute('class', 'input-holder');
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="connectButton">Spoji se s drugima!</button>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
     inputFunctions();
@@ -120,14 +128,25 @@ function p2pMode() { // priprema p2p mode i otvara prozor za input datoteka
 function s2pMode() { // priprema s2p mode i otvara prozor za input datoteka
     sharingMode = 's2p';
 
-    let inputHolder = document.createElement('div');
-    inputHolder.setAttribute("class", "input-holder");
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
 
     inputFunctions();
 
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
+}
+
+function spajanjeKorisnika() {
+    // uspostavit p2p konekciju nekako
+    let peer = new Peer();
+
+    peer.on('open', (id) => {
+        console.log("mj peer id", id);
+        // skuzit kako omogućit korisniku da posalje link pa da se dvi osobe spoje,
+        // mozda stavit ka query u url pa imat window onload event koji trazi ima li taj query 
+        // ili samo da kopira id i posalje drugoj osobi
+        //util.supporst reliable datachannels
+    });
 }
 
 // pomocne funkcije
@@ -161,6 +180,8 @@ function signOut() {
 function resetInput() {
     document.getElementById("drag-drop").innerText = "Stisni ili ubaci datoteku koju želiš podjeliti";
     document.getElementById('submitButton').classList.add('disabled');
+    document.getElementById('connectButton').classList.add('disabled');
+    
 }
 
 function copyToClipboard() {

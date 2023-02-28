@@ -22,7 +22,7 @@
 }
 
 .input-holder {
-    height: 15rem;
+    height:auto;
     width: 25rem;
     padding: 1rem;
     clear: both;
