@@ -162,3 +162,14 @@ function resetInput() {
     document.getElementById("drag-drop").innerText = "Stisni ili ubaci datoteku koju želiš podjeliti";
     document.getElementById('submitButton').classList.add('disabled');
 }
+
+function copyToClipboard() {
+  const text = document.getElementById("shortURL").innerText;
+  const textarea = document.createElement('textarea');
+
+  textarea.value = text;
+  document.body.appendChild(textarea);
+  textarea.select();
+  document.execCommand('copy');
+  document.body.removeChild(textarea);
+}

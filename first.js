@@ -52,8 +52,11 @@ loginButton.addEventListener('click', () => {
 registerButton.addEventListener('click', () => {
     let username = document.getElementById('username').value;
     let password = document.getElementById('password').value;
-
-    if (username.length > 0 && password.length > 0) {
+    checkForDuplicateUser(username).then(duplicateExists => {
+    if (duplicateExists) {
+      errorDisplay(`Korisničko ime ${username} već postoji.`);
+    } else {
+      if (username.length > 0 && password.length > 0 && checkForDuplicateUser(username)) {
         db.collection('Korisnici').add({
                 username: `${username}`,
                 password: `${password}`,
@@ -68,6 +71,11 @@ registerButton.addEventListener('click', () => {
     } else {
         errorDisplay('Upišite validno korisničko ime i lozinku.')
     }
+    }
+    })
+     .catch(error => {
+         errorDisplay("Problem sa provjeravanjem postojanja korisničkog imena:", error);
+    });
 });
 
 function glavnaAplikacija(idKorisnika) {
@@ -76,6 +84,13 @@ function glavnaAplikacija(idKorisnika) {
     window.location.href = '/main/index.html'; // redirect na glavni app
 }
 
+function checkForDuplicateUser(username) {
+    return db.collection('Korisnici').where('username', '==', username).get().then(querySnapshot => {
+        console.log(querySnapshot.size);
+        return querySnapshot.size > 0;
+      });
+}
+  
 function openModal(modal) {
     const elem = document.getElementById(modal);
     const instance = M.Modal.init(elem, {
