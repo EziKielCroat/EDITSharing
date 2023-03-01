@@ -94,7 +94,7 @@ function inputFunctionsP2P() {
     });
 
     connectButton.addEventListener('click', () => {
-        spajanjeKorisnika(); // posli dovrsit
+        postaviSpajanjeModal();
     })
 }
 
@@ -105,7 +105,6 @@ function handleFiles(files) {
     if (files.length > 0) {
         if (sharingMode === 'p2p') {
             p2pHandler(file);
-            console.log(1);
             resetInput();
         } else if (sharingMode === 's2p') {
             s2pHandler(file, ref);
@@ -149,7 +148,7 @@ function promjeniLozinku() {
 function p2pMode() { // priprema p2p mode i otvara prozor za input datoteka
     sharingMode = 'p2p';
 
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="connectButton">Spoji se s drugima!</button>'
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
     inputFunctionsP2P();
@@ -177,15 +176,86 @@ function postavljanjeVeze(files) {
         const data = {
             shortID: shortID,
             longID: id
-        }
-        console.log("mj peer id", id);
+        };
         db.collection("AktivneKonekcije").doc().set(data).then(() => {
             // otvori modal i podjeli kratki id korisniku
+            let connectionModal = document.createElement("div");
+            connectionModal.setAttribute('class', 'connection-modal');
+            connectionModal.innerHTML = `<div id="modalConnection" class="modal"><div class="modal-content"><h4>Početak djeljenja</h4><p>Kako bi ste uspostavili konekciju između druge osobe, mora te im prosljediti svoj ID. Nakon toga, osobi će se pokazati žele li primiti datoteku koju šaljete. Molimo Vas da ne zatvarate prozor jer će prekinuti vašu konekciju.</p> <p>Vaš ID: ${shortID}</p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+            document.getElementsByClassName("container")[0].appendChild(connectionModal);
+
+            openModal('modalConnection');
             console.log("Document successfully written!");
           })
           .catch((error) => {
             console.error("Error writing document: ", error);
           });
+    });
+
+    // neprima poruke
+    peer.on('connection', (conn) => {
+        conn.on('open', function() {
+            // Receive messages
+            conn.on('data', function(data) {
+              console.log('Received', data);
+            });
+        
+            // Send messages
+            conn.send('Hello!');
+          });
+    });
+}
+
+function postaviSpajanjeModal() {
+    let connectionModal2 = document.createElement("div");
+    connectionModal2.setAttribute('class', 'connection-modal');
+    connectionModal2.innerHTML = `<div id="modalConnection2" class="modal"><div class="modal-content"><h4>Početak spajanja</h4><p>Kako bi uspostavili konekciju između druge osobe, mora te upisat ID koji su vam poslali. Nakon što upišete ID i stisnete Spoji se gumb, zatvorit će se modal I moći će te odabrati želi te li skinitu datoteku. Ima te i opciju dopisivanja u desnom kutu.</p> <input id="upisaniID" placeholder="Vaš ID ovdje.."><button class="btn waves-effect waves-green red lighten-1" type="submit" name="action" id="submitIDButton" onclick="predSpajanjeKorisnika();">Spoji se</button></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+    document.getElementsByClassName("container")[0].appendChild(connectionModal2);
+    openModal('modalConnection2');
+}
+
+function predSpajanjeKorisnika() {
+    console.log(1);
+    const id = document.getElementById("upisaniID").value;
+
+    if(id.length > 0) {
+        console.log(2);
+        // db.collection nac di je short id document, uzet njegov id i nac longID. nakon sta dobijes longID imas let conn = peer.connection(longID);
+        db.collection('AktivneKonekcije').where('shortID', '==', id).get().then((querySnapshot) => {
+            console.log(3);
+            if(querySnapshot.size > 0) {
+                console.log(4)
+                querySnapshot.forEach(doc => {
+                    console.log(5)
+                    let obj = doc.data();
+                    let peerID = obj.longID;
+                    spajanjeKorisnika(peerID);
+                });
+            } else {
+                errorDisplay('ID konekcije nije validan.');
+            }
+    });
+    }
+}
+
+function spajanjeKorisnika(id) {
+    console.log(6);
+    console.log(id);
+
+    // neradi nista
+    let peer = new Peer([], {debug: 2});
+    let conn = peer.connect(id);
+
+    conn.send('Hello!');
+
+    conn.on('open', function() {
+        console.log(7)
+        // Receive messages
+        conn.on('data', function(data) {
+          console.log('Received', data);
+        });
+        console.log(8);
+        // Send messages
     });
 }
 
@@ -219,9 +289,7 @@ function signOut() {
 
 function resetInput() {
     document.getElementById("drag-drop").innerText = "Stisni ili ubaci datoteku koju želiš podjeliti";
-    document.getElementById('submitButton').classList.add('disabled');
-    document.getElementById('connectButton').classList.add('disabled');
-    
+    document.getElementById('submitButton').classList.add('disabled');    
 }
 
 function copyToClipboard() {
