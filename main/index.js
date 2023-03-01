@@ -28,11 +28,11 @@ window.onload = function () {
     }
 }
 
-// logika za input prozor
-function inputFunctions() {
+// logika za input prozor s2p
+function inputFunctionsS2P() {
 
     const dropzone = document.getElementById('drag-drop');
-    const connectButton = document.getElementById("connectButton");
+    const submitButton = document.getElementById('submitButton');
 
     dropzone.addEventListener('click', () => {
         const input = document.createElement('input');
@@ -40,7 +40,6 @@ function inputFunctions() {
         input.onchange = (e) => {
            const files = e.target.files;
            const file = files[0];
-           const submitButton = document.getElementById("submitButton");
 
            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
            document.getElementById('submitButton').classList.remove('disabled');
@@ -60,9 +59,42 @@ function inputFunctions() {
     dropzone.addEventListener('dragover', (event) => {
         event.preventDefault();
     });
+}
+
+function inputFunctionsP2P() {
+
+    const dropzone = document.getElementById('drag-drop');
+    const connectButton = document.getElementById("connectButton");
+    const submitButton = document.getElementById('submitButton');
+
+    dropzone.addEventListener('click', () => {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.onchange = (e) => {
+           const files = e.target.files;
+           const file = files[0];
+
+           document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
+           document.getElementById('submitButton').classList.remove('disabled');
+           document.getElementById('connectButton').classList.remove('disabled');
+           submitButton.addEventListener('click', () => {
+            postavljanjeVeze(e.target.files);
+           });
+        };
+        input.click();
+    });
+
+    dropzone.addEventListener('drop', (event) => {
+        event.preventDefault();
+        handleFiles(event.dataTransfer.files);
+    });
+
+    dropzone.addEventListener('dragover', (event) => {
+        event.preventDefault();
+    });
 
     connectButton.addEventListener('click', () => {
-        spajanjeKorisnika();
+        spajanjeKorisnika(); // posli dovrsit
     })
 }
 
@@ -120,7 +152,7 @@ function p2pMode() { // priprema p2p mode i otvara prozor za input datoteka
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="connectButton">Spoji se s drugima!</button>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
-    inputFunctions();
+    inputFunctionsP2P();
 
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
 }
@@ -131,21 +163,29 @@ function s2pMode() { // priprema s2p mode i otvara prozor za input datoteka
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
 
-    inputFunctions();
+    inputFunctionsS2P();
 
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
 }
 
-function spajanjeKorisnika() {
+function postavljanjeVeze(files) {
     // uspostavit p2p konekciju nekako
     let peer = new Peer();
 
     peer.on('open', (id) => {
+        const shortID = generateWord(); // ovo je id koji ce se prikazat korisniku, a ovaj id je povezan u firebaseu sa dugin idon
+        const data = {
+            shortID: shortID,
+            longID: id
+        }
         console.log("mj peer id", id);
-        // skuzit kako omogućit korisniku da posalje link pa da se dvi osobe spoje,
-        // mozda stavit ka query u url pa imat window onload event koji trazi ima li taj query 
-        // ili samo da kopira id i posalje drugoj osobi
-        //util.supporst reliable datachannels
+        db.collection("AktivneKonekcije").doc().set(data).then(() => {
+            // otvori modal i podjeli kratki id korisniku
+            console.log("Document successfully written!");
+          })
+          .catch((error) => {
+            console.error("Error writing document: ", error);
+          });
     });
 }
 
@@ -194,3 +234,25 @@ function copyToClipboard() {
   document.execCommand('copy');
   document.body.removeChild(textarea);
 }
+
+function generateWord() {
+    const numbers = '0123456789';
+    const upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    const lowerCaseLetters = 'abcdefghijklmnopqrstuvwxyz';
+    let word = '';
+    
+    // bar jedan broj jedno veliko i malo slovo
+    word += numbers[Math.floor(Math.random() * numbers.length)];
+    word += upperCaseLetters[Math.floor(Math.random() * upperCaseLetters.length)];
+    word += lowerCaseLetters[Math.floor(Math.random() * lowerCaseLetters.length)];
+    
+    // jos dva random slova/brojeva iz skupa svih
+    for (let i = 0; i < 2; i++) {
+      const characters = numbers + upperCaseLetters + lowerCaseLetters;
+      word += characters[Math.floor(Math.random() * characters.length)];
+    }
+    
+    const shuffledWord = word.split('').sort(() => 0.5 - Math.random()).join('');
+    
+    return shuffledWord;
+  }
