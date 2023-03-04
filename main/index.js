@@ -17,9 +17,11 @@ const db = app.firestore();
 const userID = localStorage.getItem('idkorisnika');
 const ref = app.storage().ref();
 let sharingMode = '';
+let fileGlobal;
 
 let inputHolder = document.createElement('div');
 inputHolder.setAttribute("class", "input-holder");
+
 
 // pregledavanje jeli korisnik 'ulogiran'
 window.onload = function () {
@@ -106,6 +108,7 @@ function handleFiles(files) {
     if (files.length > 0) {
         if (sharingMode === 'p2p') {
             p2pHandler(file);
+            window.file = file;
             resetInput();
         } else if (sharingMode === 's2p') {
             s2pHandler(file, ref);
@@ -178,8 +181,6 @@ function postaviSpajanjeModal() {
 }
 
 // pomocne funkcije
-
-// mozda opet napravit question modal
 
 function openModal(modal) {
     const elem = document.getElementById(modal);

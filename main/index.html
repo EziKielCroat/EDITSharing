@@ -22,14 +22,26 @@
         <li class="divider"></li>
         <li><a onclick="s2pMode()" href="#!">S2P</a></li>
       </ul>
+      <ul id="dropdown2" class="dropdown-content">
+        <li><a onclick="p2pMode()" href="#!">P2P</a></li>
+        <li class="divider"></li>
+        <li><a onclick="s2pMode()" href="#!">S2P</a></li>
+      </ul>
 
       <nav>
         <div class="nav-wrapper red lighten-1">
           <a href="#!" class="brand-logo">YouShare</a>
+          <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul class="right hide-on-med-and-down">
             <li><a class="dropdown-trigger" id="addIcon" href="#!" data-target="dropdown1">+<i class="material-icons right">arrow_drop_down</i></a></li>
             <li><a onclick="openModal('modal1')" id="questionIcon">?</a></li>
             <li><a onclick="openModal('modal2')" id="accountIcon"><span class="material-icons">account_circle</span></a></li>           
+        </ul>
+
+        <ul class="sidenav" id="mobile-demo">
+          <li><a class="dropdown-trigger" id="addIcon" href="#!" data-target="dropdown2">+<i class="material-icons right">arrow_drop_down</i></a></li>
+          <li><a onclick="openModal('modal1')" id="questionIcon">?</a></li>
+          <li><a onclick="openModal('modal2')" id="accountIcon"><span class="material-icons">account_circle</span></a></li>     
         </ul>
         </div>
       </nav>

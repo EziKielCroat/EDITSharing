@@ -21,6 +21,26 @@
     font-size: 18px;
 }
 
+#drag-drop {
+    margin-bottom: 0.5rem;
+}
+
+
+#drag-drop2 {
+    padding: 10px;
+    border: 2px dashed #bbb;
+    background-color: #eee;
+    width: 300px;
+    height: 100px;
+    text-align: center;
+    font-size: 18px;
+}
+
+#drag-drop2 {
+    margin-bottom: 0.5rem;
+}
+
+
 .input-holder {
     height:auto;
     width: 25rem;
@@ -32,9 +52,7 @@
     border-radius: 0.5rem;
 }
 
-#drag-drop {
-    margin-bottom: 0.5rem;
-}
+
 
 span {
     padding-right: 0.5rem;
