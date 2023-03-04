@@ -43,7 +43,6 @@ function inputFunctionsS2P() {
 
            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
            document.getElementById('submitButton').classList.remove('disabled');
-           document.getElementById('connectButton').classList.remove('disabled');
            submitButton.addEventListener('click', () => {
             handleFiles(e.target.files);
            });
