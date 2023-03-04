@@ -47,7 +47,7 @@ loginButton.addEventListener('click', () => {
     }
 });
 
-// izrada računa // mozda dodaj da nemogu bit vise korisnika s istin imenom
+// izrada računa 
 
 registerButton.addEventListener('click', () => {
     let username = document.getElementById('username').value;
