@@ -39,3 +39,7 @@
 span {
     padding-right: 0.5rem;
 }
+
+.hidden-element {
+    display: none;
+}

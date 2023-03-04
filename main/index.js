@@ -36,17 +36,19 @@ function inputFunctionsS2P() {
 
     dropzone.addEventListener('click', () => {
         const input = document.createElement('input');
+        input.setAttribute('class', 'hidden-element');
         input.type = 'file';
         input.onchange = (e) => {
            const files = e.target.files;
            const file = files[0];
-
+           input.accept = ''; // add this line to specify the accepted file type
            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
            document.getElementById('submitButton').classList.remove('disabled');
            submitButton.addEventListener('click', () => {
             handleFiles(e.target.files);
            });
         };
+        document.body.appendChild(input);
         input.click();
     });
 
@@ -168,7 +170,7 @@ function s2pMode() { // priprema s2p mode i otvara prozor za input datoteka
 
 function postavljanjeVeze(files) {
     // uspostavit p2p konekciju nekako
-    let peer = new Peer();
+    let peer = new Peer( {debug: 3});
 
     peer.on('open', (id) => {
         const shortID = generateWord(); // ovo je id koji ce se prikazat korisniku, a ovaj id je povezan u firebaseu sa dugin idon
@@ -242,7 +244,7 @@ function spajanjeKorisnika(id) {
     console.log(id);
 
     // neradi nista
-    let peer = new Peer([], {debug: 2});
+    let peer = new Peer([], {debug: 3});
     let conn = peer.connect(id);
 
     conn.send('Hello!');
