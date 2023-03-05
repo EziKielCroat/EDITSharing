@@ -1,5 +1,5 @@
 
-
+// pripremi dokument za slanje
 function s2pHandler(file, ref) {
     const name = new Date() + "-" + file.name
 
@@ -15,6 +15,7 @@ function s2pHandler(file, ref) {
     });
 }
 
+// prikazuje sve u modalu
 function successDisplay(msg, url) {
     let successDisplay = document.createElement('div');
     shortURL(url).then(shortURL => {
@@ -27,9 +28,9 @@ function successDisplay(msg, url) {
             });
             instance.open();
     }).catch(error => {console.log(error);});
-
 }
 
+// bitly implementacija, sa njihove dokumentacije
 async function shortURL(url) {
     const accessToken = 'b097faaca4bd6dae524691db898d7d534386e6f7';
     const apiUrl = `https://api-ssl.bitly.com/v4/shorten`;
@@ -49,4 +50,4 @@ async function shortURL(url) {
     const shortURL = responseData.link;
   
     return shortURL;
-  }
+}

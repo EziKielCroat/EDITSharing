@@ -1,15 +1,17 @@
 
+
 function p2pHandler(file) {
-    // uspostavit p2p konekciju nekako
+    // inicijalizacija PeerJS konekcije
     let peer = new Peer( {debug: 3});
+
     peer.on('open', (id) => {
-        const shortID = generateWord(); // ovo je id koji ce se prikazat korisniku, a ovaj id je povezan u firebaseu sa dugin idon
+        const shortID = generateWord(); // ovo je kratki id koji prikazujemo korisniku
         const data = {
             shortID: shortID,
             longID: id
         };
         db.collection("AktivneKonekcije").doc().set(data).then(() => {
-            // otvori modal i podjeli kratki id korisniku
+            // otvori modal i prikazi kratki id korisniku
             let connectionModal = document.createElement("div");
             connectionModal.setAttribute('class', 'connection-modal');
             connectionModal.setAttribute('id', 'connection-modal');
@@ -23,26 +25,26 @@ function p2pHandler(file) {
             console.error("Error writing document: ", error);
           });
     });
-
+    // peer.on('connnection') se upali kad se uspostavi konekcija sa peerom
     peer.on('connection', (conn) => {
+        // Kad se konekcija otvorit(sad mos slat i primat poruke u sigurnosti da se upalilo)
         conn.on('open', function() {
-            // Receive messages
-            const sendingFile = window.file;
-            const typeOf = sendingFile.type;
+            const sendingFile = window.file; // window.file je file koji namjeravan slat u window variabli
+            const typeOf = sendingFile.type; 
             let sendingBlob;
 
-            if(sendingFile.type) {
+            if(sendingFile.type) { // ako sendingFile.type je truthy stavit ce typeOf (nemoze sendingFile.type jer bude [object Object])
                 sendingBlob = new Blob([sendingFile], {type: typeOf});
-            }else {
+            }else { // generalni mime type
                 sendingBlob = new Blob([sendingFile], {type: "application/octet-stream"});
             }
 
-            conn.on('data', function(data) {
+            conn.on('data', function(data) { // mozda dodan chat
                  console.log('Received', data);
             });
-            
+            // slanje objekta koji sadržava sve potrebno za file transfer
             conn.send({data: sendingBlob, sending: 'file', fileName: sendingFile.name});
-          });
+          })
     });
 
     peer.on('error', (err) => {
@@ -50,10 +52,9 @@ function p2pHandler(file) {
     });
 }
 
-function predSpajanjeKorisnika() {
-    // uzmi short id i nadi long
+function predSpajanjeKorisnika() { // prije spajanje korisnika moramo izvuci longID iz firebasea
     const shortID = document.getElementById("upisaniID").value;
-
+    // uzimam shortID i nalazi doc u kojen se nalazi, pa iz tog doc-a izvlaci longID(peer.id) pošiljatelja
     db.collection('AktivneKonekcije').where("shortID", "==", shortID).get().then((querySnapshot) => {
         querySnapshot.forEach(doc => {
             let obj = doc.data();
@@ -69,23 +70,23 @@ function predSpajanjeKorisnika() {
 }
 
 function spojiKorisnika(longID) {
+    // inicijalizacija PeerJS konekcije
     const peer = new Peer({debug: 3});
 
     peer.on('open', () => {
-        const conn = peer.connect(longID);
+        const conn = peer.connect(longID); // spajanje na longID povućen iz firebasea
         conn.on('open', () => {
-            // ovdi pocinje slanje izmedu peera
-            
-            conn.send("radi pls");
-        });
 
-        conn.on('data', (data) => {
-            if(data.sending === 'file') {
-                prikaziDatoteku(data);
-            } else {
-                // mozda dodan chat
-            }
-            console.log('Recived', data);
+            conn.send("spojen"); // cisto za debugging
+
+            conn.on('data', (data) => {
+                if(data.sending === 'file') { // prikazivanje primljene datoteke(objekta(nije blob))
+                    prikaziDatoteku(data);
+                } else {
+                    // mozda dodan chat
+                }
+                console.log('Recived', data);
+            });
         });
     });
 
@@ -95,36 +96,41 @@ function spojiKorisnika(longID) {
 }
 
 function prikaziDatoteku(data) {
-    const container = document.getElementsByClassName("input-holder")[0];
+    const container = document.getElementsByClassName("input-holder")[0]; // ovdje ide fileholder
+    const fileType = data.data.type || getMimeType(data.fileName); // pokusavan skuzit tip datoteke
+    let file = new Blob([data.data], {type: fileType}); // pretvaranje primljene datoteke u blob
     let fileHolder = document.createElement("div");
-    const fileType = data.data.type || getMimeType(data.fileName);
-    let file = new Blob([data.data], {type: fileType});
 
     fileHolder.setAttribute('class', 'file-holder');
     fileHolder.setAttribute('id', 'fileHolder');
 
+    // fileholder innerhtml
     fileHolder.innerHTML = `<div id="drag-drop2">Korisnik vam želi poslati datoteku: ${data.fileName}</div> <button class="btn waves-effect waves-green red lighten-1" id="downloadButton">Preuzmi datoteku</button>`
     container.innerHTML = '';
     container.appendChild(fileHolder);
+
     const downloadButton = document.getElementById('downloadButton');
 
+    // ako korisnik prihvati datoteku pocni skidanje 
     downloadButton.addEventListener('click', () => {
         downloadFile(file, data.fileName);
     });
 }
 
+
 function downloadFile(fileObj, fileName) {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-  
+    // ako je za mobitel opali downloadBlob
     if (isMobile) {
       downloadBlob(fileObj, fileName);
-    } else {
+    } else { // pocinje skidanje za desktop
       const fileType = fileObj.type || getMimeType(fileName);
       downloadFileDesktop(fileObj, fileName, fileType);
     }
   }
   
   function downloadFileDesktop(fileObj, fileName, fileType) {
+    // poprilicno jednostavno nemoran valjda objasnjavat
     const url = URL.createObjectURL(fileObj);
     
     const a = document.createElement('a');
@@ -141,13 +147,15 @@ function downloadFile(fileObj, fileName) {
     });
     
     a.click();
-  }
+}
   
-  function downloadBlob(blob, filename) {
+
+function downloadBlob(blob, filename) {
+    // neradi bas dobro al radi polovno
     const link = document.createElement('a');
   
     if ('download' in link) {
-      // Use the download attribute if supported
+        // uglavnom za chrome
       const url = URL.createObjectURL(blob);
       link.href = url;
       link.download = filename;
@@ -157,7 +165,7 @@ function downloadFile(fileObj, fileName) {
       URL.revokeObjectURL(url);
       document.body.removeChild(link);
     } else {
-      // Use a fallback method if the download attribute is not supported
+      // fallback ako download attribute nije podrzan u browseru
       const reader = new FileReader();
       reader.onloadend = function() {
         const url = reader.result;
@@ -169,9 +177,9 @@ function downloadFile(fileObj, fileName) {
       };
       reader.readAsDataURL(blob);
     }
-  }
+}
 
-function getMimeType(fileName) {
+function getMimeType(fileName) { // ako datoteka nema tip usere se sve pa ono mali fiks
     const types = {
         ".aac": "audio/aac",
         ".abw": "application/x-abiword",
@@ -246,9 +254,7 @@ function getMimeType(fileName) {
     };
         const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
         return types[extension] || 'application/octet-stream';
-  }
-  
-  
+}
   
 function closeModal(modal) {
     const elem = document.getElementById(modal);

@@ -43,7 +43,8 @@ function inputFunctionsS2P() {
         input.onchange = (e) => {
            const files = e.target.files;
            const file = files[0];
-           input.accept = ''; // add this line to specify the accepted file type
+           input.accept = ''; // bez ovog neradi na chromeu
+
            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
            document.getElementById('submitButton').classList.remove('disabled');
            submitButton.addEventListener('click', () => {
@@ -51,11 +52,11 @@ function inputFunctionsS2P() {
            });
         };
         document.body.appendChild(input);
-        input.click();
+        input.click(); 
     });
 
     dropzone.addEventListener('drop', (event) => {
-        event.preventDefault();
+        event.preventDefault(); // prilagodi tako da dodamo da neuploda odma
         handleFiles(event.dataTransfer.files);
     });
 
@@ -63,6 +64,8 @@ function inputFunctionsS2P() {
         event.preventDefault();
     });
 }
+
+// logika za input prozor p2p
 
 function inputFunctionsP2P() {
 
@@ -88,7 +91,7 @@ function inputFunctionsP2P() {
     });
 
     dropzone.addEventListener('drop', (event) => {
-        event.preventDefault();
+        event.preventDefault(); // prilagodi tako da dodamo da neuploda odma
         handleFiles(event.dataTransfer.files);
     });
 
@@ -101,14 +104,14 @@ function inputFunctionsP2P() {
     })
 }
 
-// djeli fileove na svoje odredene funkcije(odrene od sharingmode variable)
+// direktira datoteku na odredeni mod oviseći o sharingmodu odabranom
 function handleFiles(files) {
     const file = files[0];
 
     if (files.length > 0) {
         if (sharingMode === 'p2p') {
             p2pHandler(file);
-            window.file = file;
+            window.file = file; // za p2pHandler datoteku koju djeli mozda zaminit da passan kao argument nego u window variabli
             resetInput();
         } else if (sharingMode === 's2p') {
             s2pHandler(file, ref);
@@ -120,7 +123,7 @@ function handleFiles(files) {
     }
 }
 
-function promjeniIme() {
+function promjeniIme() { // mjenja ime korisnika ulogiranog
     let usernameNew = document.getElementById('promjenaImena').value;
 
     if (usernameNew.length > 0) {
@@ -135,6 +138,7 @@ function promjeniIme() {
     }
 }
 
+// mjenja lozinku korisnika ulogiranog
 function promjeniLozinku() {
     let passwordNew = document.getElementById('promjenaLozinke').value;
 
@@ -149,38 +153,42 @@ function promjeniLozinku() {
     }
 }
 
-function p2pMode() { // priprema p2p mode i otvara prozor za input datoteka
+function p2pMode() { 
+    // priprema p2p mode i otvara prozor za input datoteka
     sharingMode = 'p2p';
 
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
-    inputFunctionsP2P();
+    inputFunctionsP2P(); // pali funkcije za prozor
 
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
 }
 
-function s2pMode() { // priprema s2p mode i otvara prozor za input datoteka
+function s2pMode() { 
+    // priprema s2p mode i otvara prozor za input datoteka
     sharingMode = 's2p';
 
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
 
-    inputFunctionsS2P();
+    inputFunctionsS2P(); // pali funkcije za prozor
 
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
 }
 
 
 function postaviSpajanjeModal() {
+    // modal u kojem se upisuje kratki id druge osobe
     let connectionModal2 = document.createElement("div");
     connectionModal2.setAttribute('class', 'connection-modal');
-    connectionModal2.innerHTML = `<div id="modalConnection2" class="modal"><div class="modal-content"><h4>Početak spajanja</h4><p>Kako bi uspostavili konekciju između druge osobe, mora te upisat ID koji su vam poslali. Nakon što upišete ID i stisnete Spoji se gumb, zatvorit će se modal I moći će te odabrati želi te li skinitu datoteku. Ima te i opciju dopisivanja u desnom kutu.</p> <input id="upisaniID" placeholder="Vaš ID ovdje.."><button class="btn waves-effect waves-green red lighten-1" type="submit" name="action" id="submitIDButton" onclick="predSpajanjeKorisnika();">Spoji se</button></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+    connectionModal2.innerHTML = `<div id="modalConnection2" class="modal"><div class="modal-content"><h4>Početak spajanja</h4><p>Kako bi uspostavili konekciju između druge osobe, mora te upisat ID koji su vam poslali. Nakon što upišete ID i stisnete Spoji se gumb, zatvoriti će se modal I moći će te odabrati želi te li skinitu datoteku. U desnom kutu imate opciju izmjenjivanja poruka između druge osobe također preko peer to peer protokola.</p> <input id="upisaniID" placeholder="Vaš ID ovdje.."><button class="btn waves-effect waves-green red lighten-1" type="submit" name="action" id="submitIDButton" onclick="predSpajanjeKorisnika();">Spoji se</button></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
     document.getElementsByClassName("container")[0].appendChild(connectionModal2);
     openModal('modalConnection2');
 }
 
 // pomocne funkcije
+// mozda ih pomaknit u zasebni file(helper.js) tako da su dostupne svim dijelovima programa.
 
 function openModal(modal) {
     const elem = document.getElementById(modal);

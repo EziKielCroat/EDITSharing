@@ -16,7 +16,7 @@ const db = app.firestore();
 const loginButton = document.getElementById('loginButton');
 const registerButton = document.getElementById('registerButton');
 
-// cekiranje jel korisnik već ulogiran ako je prosljedi ga na glavnu app
+// gleda jel korisnik vec ulogiran, ako je prosljedi na glavni app
 
 window.onload = function () {
     if (localStorage.getItem('idkorisnika') !== null) {
@@ -33,8 +33,7 @@ loginButton.addEventListener('click', () => {
     if (username.length > 0 && password.length > 0) {
         db.collection('Korisnici').where('username', '==', `${username}`).where('password', '==', `${password}`).get().then((querySnapshot) => {
             querySnapshot.forEach(doc => {
-                let obj = doc.data();
-                console.log("a");// obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
+                let obj = doc.data(); // obj je objekt koji nije prazan ako je nasa korisnika koji se podudara u db
                 if (Object.keys(obj).length > 0) {
                     glavnaAplikacija(doc.id);
                 } else {
@@ -47,7 +46,7 @@ loginButton.addEventListener('click', () => {
     }
 });
 
-// izrada računa 
+// Izrada računa 
 
 registerButton.addEventListener('click', () => {
     let username = document.getElementById('username').value;
