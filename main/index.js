@@ -81,7 +81,7 @@ function inputFunctionsP2P() {
            document.getElementById('submitButton').classList.remove('disabled');
            document.getElementById('connectButton').classList.remove('disabled');
            submitButton.addEventListener('click', () => {
-            handleFiles(e.target.files);
+            handleFiles(files);
            });
         };
         input.click();
