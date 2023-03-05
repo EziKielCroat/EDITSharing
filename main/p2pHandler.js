@@ -28,10 +28,11 @@ function p2pHandler(file) {
         conn.on('open', function() {
             // Receive messages
             const sendingFile = window.file;
+            const typeOf = sendingFile.type;
             let sendingBlob;
 
             if(sendingFile.type) {
-                sendingBlob = new Blob([sendingFile], {type: sendingFile.type});
+                sendingBlob = new Blob([sendingFile], {type: typeOf});
             }else {
                 sendingBlob = new Blob([sendingFile], {type: "application/octet-stream"});
             }
@@ -42,6 +43,10 @@ function p2pHandler(file) {
             
             conn.send({data: sendingBlob, sending: 'file', fileName: sendingFile.name});
           });
+    });
+
+    peer.on('error', (err) => {
+        console.log(err);
     });
 }
 
@@ -83,23 +88,28 @@ function spojiKorisnika(longID) {
             console.log('Recived', data);
         });
     });
+
+    peer.on('error', (err) => {
+        console.log(err);
+    });
 }
 
 function prikaziDatoteku(data) {
     const container = document.getElementsByClassName("input-holder")[0];
-    let file = new File([data], data.fileName, {type: data.type});
     let fileHolder = document.createElement("div");
+    const fileType = data.data.type || getMimeType(data.fileName);
+    let file = new Blob([data.data], {type: fileType});
 
     fileHolder.setAttribute('class', 'file-holder');
     fileHolder.setAttribute('id', 'fileHolder');
 
-    fileHolder.innerHTML = `<div id="drag-drop2">Korisnik vam želi poslati datoteku: ${file.name}</div> <button class="btn waves-effect waves-green red lighten-1" id="downloadButton">Preuzmi datoteku</button>`
+    fileHolder.innerHTML = `<div id="drag-drop2">Korisnik vam želi poslati datoteku: ${data.fileName}</div> <button class="btn waves-effect waves-green red lighten-1" id="downloadButton">Preuzmi datoteku</button>`
     container.innerHTML = '';
     container.appendChild(fileHolder);
     const downloadButton = document.getElementById('downloadButton');
 
     downloadButton.addEventListener('click', () => {
-        downloadFile(file, file.name);
+        downloadFile(file, data.fileName);
     });
 }
 
@@ -107,11 +117,9 @@ function downloadFile(fileObj, fileName) {
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
   
     if (isMobile) {
-      downloadFileMobile(fileObj, fileName);
+      downloadBlob(fileObj, fileName);
     } else {
-      console.log(getMimeType(fileName));
       const fileType = fileObj.type || getMimeType(fileName);
-      console.log(fileType);
       downloadFileDesktop(fileObj, fileName, fileType);
     }
   }
@@ -135,18 +143,31 @@ function downloadFile(fileObj, fileName) {
     a.click();
   }
   
-  function downloadFileMobile(fileObj, fileName) {
-    if (window.navigator.msSaveOrOpenBlob) {
-      window.navigator.msSaveOrOpenBlob(fileObj, fileName);
+  function downloadBlob(blob, filename) {
+    const link = document.createElement('a');
+  
+    if ('download' in link) {
+      // Use the download attribute if supported
+      const url = URL.createObjectURL(blob);
+      link.href = url;
+      link.download = filename;
+      link.style.display = 'none';
+      document.body.appendChild(link);
+      link.click();
+      URL.revokeObjectURL(url);
+      document.body.removeChild(link);
     } else {
+      // Use a fallback method if the download attribute is not supported
       const reader = new FileReader();
-      reader.onloadend = () => {
-        const tempLink = document.createElement('a');
-        tempLink.href = reader.result;
-        tempLink.setAttribute('download', fileName);
-        tempLink.click();
+      reader.onloadend = function() {
+        const url = reader.result;
+        const iframe = document.createElement('iframe');
+        iframe.src = url;
+        iframe.style.display = 'none';
+        document.body.appendChild(iframe);
+        setTimeout(() => document.body.removeChild(iframe), 333);
       };
-      reader.readAsDataURL(fileObj);
+      reader.readAsDataURL(blob);
     }
   }
 
