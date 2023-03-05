@@ -1,7 +1,7 @@
 
 function p2pHandler(file) {
     // uspostavit p2p konekciju nekako
-    let peer = new Peer( {debug: 1});
+    let peer = new Peer( {debug: 3});
     peer.on('open', (id) => {
         const shortID = generateWord(); // ovo je id koji ce se prikazat korisniku, a ovaj id je povezan u firebaseu sa dugin idon
         const data = {
@@ -69,7 +69,7 @@ function predSpajanjeKorisnika() {
 }
 
 function spojiKorisnika(longID) {
-    const peer = new Peer();
+    const peer = new Peer({debug: 3});
 
     peer.on('open', () => {
         const conn = peer.connect(longID);
