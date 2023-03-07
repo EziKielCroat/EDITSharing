@@ -82,7 +82,6 @@ function inputFunctionsP2P() {
 
            document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
            document.getElementById('submitButton').classList.remove('disabled');
-           document.getElementById('connectButton').classList.remove('disabled');
            submitButton.addEventListener('click', () => {
             handleFiles(files);
            });
@@ -91,8 +90,15 @@ function inputFunctionsP2P() {
     });
 
     dropzone.addEventListener('drop', (event) => {
+        const files = event.dataTransfer.files;
+        const file = files[0];
+
         event.preventDefault(); // prilagodi tako da dodamo da neuploda odma
-        handleFiles(event.dataTransfer.files);
+        document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
+        document.getElementById('submitButton').classList.remove('disabled');
+        submitButton.addEventListener('click', () => {
+            handleFiles(files);
+        });
     });
 
     dropzone.addEventListener('dragover', (event) => {
@@ -155,9 +161,10 @@ function promjeniLozinku() {
 
 function p2pMode() { 
     // priprema p2p mode i otvara prozor za input datoteka
+    // pali se klikom na p2p opciju u dropdownu (+)
     sharingMode = 'p2p';
 
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button>'
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button> <br>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
     inputFunctionsP2P(); // pali funkcije za prozor
@@ -167,6 +174,7 @@ function p2pMode() {
 
 function s2pMode() { 
     // priprema s2p mode i otvara prozor za input datoteka
+    // pali se klikom na s2p opciju u dropdownu (+)
     sharingMode = 's2p';
 
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'

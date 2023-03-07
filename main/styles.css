@@ -40,7 +40,6 @@
     margin-bottom: 0.5rem;
 }
 
-
 .input-holder {
     height:auto;
     width: 25rem;
@@ -50,6 +49,10 @@
     margin-top: 5rem;
     border: 1px solid #cfd8dc;
     border-radius: 0.5rem;
+}
+
+#cancelConnection {
+    margin-top: 1rem;
 }
 
 
