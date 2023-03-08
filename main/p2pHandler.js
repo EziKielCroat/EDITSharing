@@ -194,7 +194,7 @@ function downloadFile(fileObj, fileName, peer) {
 }
   
 
-function downloadBlob(blob, filename, peer) {
+function downloadBlob(blob, filename, peer) { // obvezno napravit da se handlea nakon uspjeha skidanja i ovdi
     // neradi bas dobro al radi polovno
     const link = document.createElement('a');
   
