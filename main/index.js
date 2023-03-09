@@ -129,36 +129,6 @@ function handleFiles(files) {
     }
 }
 
-function promjeniIme() { // mjenja ime korisnika ulogiranog
-    let usernameNew = document.getElementById('promjenaImena').value;
-
-    if (usernameNew.length > 0) {
-        db.collection('Korisnici').doc(userID).update({
-            username: `${usernameNew}`
-        });
-        document.getElementById('promjenaImena').value = '';
-
-    } else {
-        errorDisplay('Upišite validno ime');
-        document.getElementById('promjenaImena').value = '';
-    }
-}
-
-// mjenja lozinku korisnika ulogiranog
-function promjeniLozinku() {
-    let passwordNew = document.getElementById('promjenaLozinke').value;
-
-    if (passwordNew.length > 0) {
-        db.collection('Korisnici').doc(userID).update({
-            password: `${passwordNew}`
-        });
-        document.getElementById('promjenaLozinke').value = '';
-    } else {
-        errorDisplay('Upišite validno prezime');
-        document.getElementById('promjenaLozinke').value = '';
-    }
-}
-
 function p2pMode() { 
     // priprema p2p mode i otvara prozor za input datoteka
     // pali se klikom na p2p opciju u dropdownu (+)
@@ -195,67 +165,4 @@ function postaviSpajanjeModal() {
     openModal('modalConnection2');
 }
 
-// pomocne funkcije
-// mozda ih pomaknit u zasebni file(helper.js) tako da su dostupne svim dijelovima programa.
-
-function openModal(modal) {
-    const elem = document.getElementById(modal);
-    const instance = M.Modal.init(elem, {
-        dismissible: false
-    });
-    instance.open();
-}
-
-function errorDisplay(msg) {
-    let errorHolder = document.createElement("div");
-
-    errorHolder.setAttribute("class", "error-holder");
-
-    errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
-    document.getElementsByClassName("container")[0].appendChild(errorHolder);
-
-    openModal('modalError');
-}
-
-function signOut() {
-    localStorage.removeItem('idkorisnika');
-    window.location.href = '/first.html';
-}
-
-function resetInput() {
-    document.getElementById("drag-drop").innerText = "Stisni ili ubaci datoteku koju želiš podjeliti";
-    document.getElementById('submitButton').classList.add('disabled');    
-}
-
-function copyToClipboard() {
-  const text = document.getElementById("shortURL").innerText;
-  const textarea = document.createElement('textarea');
-
-  textarea.value = text;
-  document.body.appendChild(textarea);
-  textarea.select();
-  document.execCommand('copy');
-  document.body.removeChild(textarea);
-}
-
-function generateWord() {
-    const numbers = '0123456789';
-    const upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-    const lowerCaseLetters = 'abcdefghijklmnopqrstuvwxyz';
-    let word = '';
-    
-    // bar jedan broj jedno veliko i malo slovo
-    word += numbers[Math.floor(Math.random() * numbers.length)];
-    word += upperCaseLetters[Math.floor(Math.random() * upperCaseLetters.length)];
-    word += lowerCaseLetters[Math.floor(Math.random() * lowerCaseLetters.length)];
-    
-    // jos dva random slova/brojeva iz skupa svih
-    for (let i = 0; i < 2; i++) {
-      const characters = numbers + upperCaseLetters + lowerCaseLetters;
-      word += characters[Math.floor(Math.random() * characters.length)];
-    }
-    
-    const shuffledWord = word.split('').sort(() => 0.5 - Math.random()).join('');
-    
-    return shuffledWord;
-  }
+// pomocne funkcije su u helper.js

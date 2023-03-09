@@ -45,7 +45,7 @@ function sendMessage() {
 
 function writeMessage() {
 	const today = new Date();
-	let message = `<div class="chatbox-message-item sent"><span class="chatbox-message-item-text">${textarea.value.trim().replace(/\n/g, '<br>\n')}</span><span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span></div>`
+	let message = `<div class="chatbox-message-item sent"><span class="chatbox-message-item-text">${textarea.value.trim().replace(/\n/g, '<br>\n')} </span><span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span></div>`
 
 	chatboxMessageWrapper.insertAdjacentHTML('beforeend', message);
 	chatboxForm.style.alignItems = 'center';
