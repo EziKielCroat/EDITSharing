@@ -55,10 +55,17 @@
     margin-top: 1rem;
 }
 
+.abeceda {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
 
-
-span {
-    padding-right: 0.5rem;
+#account {
+    display: inline-block;
+    text-align: center;
+    vertical-align: middle;
+    padding-bottom: 0.5rem;
 }
 
 .hidden-element {

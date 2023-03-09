@@ -176,14 +176,3 @@ function getMimeType(fileName) { // ako datoteka nema tip usere se sve pa ono ma
         const extension = fileName.substring(fileName.lastIndexOf('.')).toLowerCase();
         return types[extension] || 'application/octet-stream';
 }
-
-function errorDisplay(msg) {
-    let errorHolder = document.createElement("div");
-
-    errorHolder.setAttribute("class", "error-holder");
-
-    errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
-    document.getElementsByClassName("container")[0].appendChild(errorHolder);
-
-    openModal('modalError');
-}

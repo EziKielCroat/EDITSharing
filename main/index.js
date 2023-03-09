@@ -57,7 +57,14 @@ function inputFunctionsS2P() {
 
     dropzone.addEventListener('drop', (event) => {
         event.preventDefault(); // prilagodi tako da dodamo da neuploda odma
-        handleFiles(event.dataTransfer.files);
+        const files = event.dataTransfer.files;
+        const file = files[0];
+
+        document.getElementById('drag-drop').innerText = `Odabrana datoteka: ${file.name}`
+        document.getElementById('submitButton').classList.remove('disabled');
+        submitButton.addEventListener('click', () => {
+            handleFiles(files);
+        });
     });
 
     dropzone.addEventListener('dragover', (event) => {
