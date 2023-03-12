@@ -80,6 +80,13 @@ function generateWord() {
     return shuffledWord;
 }
 
+function checkForDuplicateUser(username) {
+    return db.collection('Korisnici').where('username', '==', username).get().then(querySnapshot => {
+        console.log(querySnapshot.size);
+        return querySnapshot.size > 0;
+      });
+}
+
 function promjeniIme() { // mjenja ime korisnika ulogiranog
     let usernameNew = document.getElementById('promjenaImena').value;
 

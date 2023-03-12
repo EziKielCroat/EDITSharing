@@ -10,10 +10,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 
+    <!-- chat -->
+    <link href='https://unpkg.com/boxicons@2.1.1/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+
     <!-- nas kod --> 
     <script src="helper.js" defer></script>
     <script src="s2pHandler.js" defer></script>
     <script src="p2pHandler.js" defer></script>
+    <script src="chat.js" defer></script>
     <script src="index.js" defer></script>
     <link rel="stylesheet" href="styles.css">
 
@@ -23,27 +28,32 @@
     <link rel="manifest" href="../slike/site.webmanifest">
 </head>
 <body>
+    <!-- dropdown za desktop --> 
     <ul id="dropdown1" class="dropdown-content">
         <li><a onclick="p2pMode()" href="#!">P2P</a></li>
         <li class="divider"></li>
         <li><a onclick="s2pMode()" href="#!">S2P</a></li>
       </ul>
+
+    <!-- dropdown za mobitel --> 
       <ul id="dropdown2" class="dropdown-content">
         <li><a onclick="p2pMode()" href="#!">P2P</a></li>
         <li class="divider"></li>
         <li><a onclick="s2pMode()" href="#!">S2P</a></li>
       </ul>
 
+      <!-- desktop navbar --> 
       <nav>
         <div class="nav-wrapper red lighten-1">
           <a href="#!" class="brand-logo">YouShare</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
-          <ul class="right hide-on-med-and-down abeceda">
+          <ul class="right hide-on-med-and-down abeceda"><!-- button desktop --> 
             <li><a class="dropdown-trigger" id="addIcon" href="#!" data-target="dropdown1">+<i class="material-icons right">arrow_drop_down</i></a></li>
             <li><a onclick="openModal('modal1')" id="questionIcon">?</a></li>
             <li><a onclick="openModal('modal2')" id="accountIcon"><span id="account" class="material-icons">account_circle</span></a></li>           
         </ul>
 
+        <!-- buttoni mobile --> 
         <ul class="sidenav" id="mobile-demo">
           <li><a class="dropdown-trigger" id="addIcon" href="#!" data-target="dropdown2">+<i class="material-icons right">arrow_drop_down</i></a></li>
           <li><a onclick="openModal('modal1')" id="questionIcon">?</a></li>
@@ -52,17 +62,18 @@
         </div>
       </nav>
 
+      <!-- modal za objasnjenje --> 
       <div id="modal1" class="modal">
         <div class="modal-content">
           <h4>Kako naša aplikacija radi?</h4>
           <p>YouShare je jednostavna web aplikacija koja se služi kao medij za prijenos datoteka i mapa. Kod naše opcije "peer-to-peer" koristimo <a href="https://peerjs.com/">PeerJS</a> on nam omogućuje da maknemo server iz prijenosa podataka te da podatci izravno idu vašoj odabranoj osobi kojoj podjelite svoj ID. </p> 
-          <!-- iznad nek luka doda objasnjenje njegove ideje  zip,application/octet-stream,application/zip,application/x-zip,application/x-zip-compressed--> 
         </div>
         <div class="modal-footer">
           <a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a>
         </div>
       </div>
 
+      <!-- modal za account settings-->
       <div id="modal2" class="modal">
         <div class="modal-content">
           <h4>Postavke računa</h4>
@@ -80,7 +91,27 @@
         </div>
       </div>
 
+      <!-- ovdi se appenda input holder s2p i p2p-->
       <div class="container">
+      </div>
+
+
+      <!-- chat toggle za p2p-->
+      <div class="chatbox-wrapper">
+        <div class="chatbox-toggle">
+          <span class="material-symbols-outlined">chat</span>
+        </div>
+        <div class="chatbox-message-wrapper">
+          <div class="chatbox-message-content">
+            <h4 class="chatbox-message-no-message">Niste još poslali poruku!</h4>
+          </div>
+          <div class="chatbox-message-bottom">
+            <form action="#" class="chatbox-message-form">
+              <textarea rows="1" placeholder="Upiši svoju poruku" class="chatbox-message-input"></textarea>
+              <button type="submit" class="chatbox-message-submit browser-default"><i class='bx bx-send'></i></button>
+            </form>
+          </div>
+        </div>
       </div>
       
       <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>

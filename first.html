@@ -2,12 +2,17 @@
 <html>
 <head>
 	<title>YouShare - Djeljenje I uplodanje fileove i folder dostupno korisniku</title>
+  <!--materliaze cdn-->
 	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  
+  <!-- nas kod-->
   <link rel="stylesheet" href="styles.css">
+  <script src="./main/helper.js" defer></script>
 	<script src="first.js" defer></script>
 
+  <!-- favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="slike/apple-touch-icon.png">
   <link rel="icon" type="image/png" sizes="32x32" href="slike/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="slike/favicon-16x16.png">
@@ -16,6 +21,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 </head> 
   <body>
+    <!-- navbar-->
     <nav>
       <div class="nav-wrapper red lighten-1">
         <a href="#" class="brand-logo">YouShare</a>
@@ -25,6 +31,7 @@
       </div>
     </nav>
 
+    <!-- modal za objasnjenje -->
     <div id="modal1" class="modal">
       <div class="modal-content">
         <h4>Kako naša aplikacija radi?</h4>
@@ -35,6 +42,7 @@
       </div>
     </div>
 
+    <!-- login/Register dio-->
     <div class="container">
       <label for="username">Korisničko ime:</label><br>
       <input type="text" id="username" name="username"><br>

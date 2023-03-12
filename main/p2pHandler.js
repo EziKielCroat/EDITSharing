@@ -1,3 +1,5 @@
+let connGlobal;
+let longIDGlobal;
 
 function p2pHandler(file) {
     // inicijalizacija PeerJS konekcije
@@ -9,14 +11,15 @@ function p2pHandler(file) {
             shortID: shortID,
             longID: id
         };
+        longIDGlobal = id;
         db.collection("AktivneKonekcije").doc().set(data).then(() => {
+
             // otvori modal i prikazi kratki id korisniku
             let connectionModal = document.createElement("div");
             connectionModal.setAttribute('class', 'connection-modal');
             connectionModal.setAttribute('id', 'connection-modal');
             connectionModal.innerHTML = `<div id="modalConnection" class="modal"><div class="modal-content"><h4>Početak djeljenja</h4><p>Kako bi ste uspostavili konekciju između druge osobe, mora te im prosljediti svoj ID. Nakon toga, osobi će se pokazati žele li primiti datoteku koju šaljete. Molimo Vas da ne zatvarate prozor jer će prekinuti vašu konekciju.</p> <p>Vaš ID: ${shortID}</p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
             document.getElementsByTagName('body')[0].appendChild(connectionModal);
-
             openModal('modalConnection');
 
             let cancelConnection = document.createElement('button');
@@ -32,12 +35,14 @@ function p2pHandler(file) {
                 makniKonekciju(id);
                 resetInput();
             });
-            console.log("Document successfully written!");
+            console.log("Uspješno upisana konkecije!");
           })
           .catch((error) => {
             errorDisplay("Error writing document: ", error);
           });
     });
+
+    // PEER EVENTOVI
 
     // peer.on('connnection') se upali kad se uspostavi konekcija sa peerom
     peer.on('connection', (conn) => {
@@ -47,23 +52,32 @@ function p2pHandler(file) {
             const typeOf = sendingFile.type; 
             let sendingBlob;
 
-            if(sendingFile.type) { // ako sendingFile.type je truthy stavit ce typeOf (nemoze sendingFile.type jer bude [object Object])
+            connGlobal = conn;
+
+            if(sendingFile.type) { // ako sendingFile.type je truthy stavit ce typeOf (nemoze sendingFile.type jer bude [object Object] (CORRUPTA FILE))
                 sendingBlob = new Blob([sendingFile], {type: typeOf});
             } else { // generalni mime type
                 sendingBlob = new Blob([sendingFile], {type: "application/octet-stream"});
             }
 
-            conn.on('data', function(data) { // mozda dodan chat
+            conn.on('data', function(data) {
                  console.log('Received: ', data);
             });
 
             // slanje objekta koji sadržava sve potrebno za file transfer
             conn.send({data: sendingBlob, sending: 'file', fileName: sendingFile.name});
+            document.getElementsByClassName('chatbox-wrapper')[0].style.display = 'block'; // prikazivanje chat
           });
+
+          conn.on('data', (data) => {
+            if(data.sending === 'message') {
+                prikaziPoruku(data);
+            }
+          })
 
           conn.on('close', () => {
             errorDisplay('Konekcija sa korisnikom je zatvorena. Stranica će se osvježit za 2 sekunde.');
-
+            makniKonekciju(longIDGlobal);
             setTimeout(() => {
                 window.location.reload();
               }, 2000); 
@@ -100,21 +114,22 @@ function spojiKorisnika(longID) {
         const conn = peer.connect(longID); // spajanje na longID povućen iz firebasea
 
         conn.on('open', () => {
-
+            connGlobal = conn;
             conn.send("spojen"); // cisto za debugging
 
             conn.on('data', (data) => {
                 if(data.sending === 'file') { // prikazivanje primljene datoteke(objekta(nije blob))
                     prikaziDatoteku(data, peer, longID);
-                } else {
-                    // mozda dodan chat
+                } else if(data.sending == 'message') {
+                    prikaziPoruku(data);
                 }
-                console.log('Recived', data);
             });
+
+            document.getElementsByClassName('chatbox-wrapper')[0].style.display = 'block'; // prikazivanje chata
         });
 
         conn.on('close', () => {
-         // zatvarnje konekcije, mozda pomaknit na botun
+         // zatvarnje konekcije
          makniKonekciju(longID);
         });
     });
@@ -122,6 +137,19 @@ function spojiKorisnika(longID) {
     peer.on('error', (err) => {
         errorDisplay(err);
     });
+}
+
+function prikaziPoruku(data) {
+
+    const today = new Date();
+    // html primljene poruke
+	let message = `<div class="chatbox-message-item received"><span class="chatbox-message-item-text">${data.data} </span><span class="chatbox-message-item-time">${addZero(today.getHours())}:${addZero(today.getMinutes())}</span></div>`
+
+	chatboxMessageWrapper.insertAdjacentHTML('beforeend', message);
+    document.querySelector('.chatbox-message-no-message').style.display = "none"; // makni no messages
+	scrollBottom();
+
+    document.getElementsByClassName('chatbox-message-input')[0].value = ''; // resetiraj textarea
 }
 
 function prikaziDatoteku(data, peer, longID) {
@@ -182,11 +210,11 @@ function downloadFile(fileObj, fileName, peer) {
             URL.revokeObjectURL(url);
           });
         } else {
-          console.error('Download failed with status ' + response.status);
+          console.error('Download nije uspio sa statusom: ' + response.status);
         }
       })
       .catch(error => {
-        console.error('Download failed with error ' + error);
+        console.error('2, Download nije uspio sa statusom:' + error);
       });
 }
   
@@ -196,26 +224,33 @@ function downloadBlob(blob, filename, peer) { // obvezno napravit da se handlea 
     const link = document.createElement('a');
   
     if ('download' in link) {
-        // uglavnom za chrome
+    // uglavnom za chrome
       const url = URL.createObjectURL(blob);
+
       link.href = url;
       link.download = filename;
       link.style.display = 'none';
+
       document.body.appendChild(link);
       link.click();
+
       URL.revokeObjectURL(url);
       document.body.removeChild(link);
     } else {
       // fallback ako download attribute nije podrzan u browseru
       const reader = new FileReader();
+
       reader.onloadend = function() {
         const url = reader.result;
         const iframe = document.createElement('iframe');
+
         iframe.src = url;
         iframe.style.display = 'none';
         document.body.appendChild(iframe);
+
         setTimeout(() => document.body.removeChild(iframe), 333);
       };
+
       reader.readAsDataURL(blob);
     }
 }
@@ -233,9 +268,9 @@ function makniKonekciju(longID) {
                     window.location.reload();
                   }, 2000); 
             } else {
-             errorDisplay('nebi se tribalo ispisat.')
+             errorDisplay('Konekcija već pomaknuta, resetiranje stranice.');
+             window.location.reload();
             }
         });
       });
-
 }
