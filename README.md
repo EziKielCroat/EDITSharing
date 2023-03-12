@@ -5,5 +5,6 @@ a folder je glavna aplikacija nije povezana p2pHandler and s2pHandler su funkcij
 
 ** ideje
 - mozda refactorat question modal
-- vjerovatno ne koristit peerjs jer nema bas projekata sa njim
-- započet sa p2p i s2p funkcionalnostima
+- updejtat readme
+- pogledat kako ulipsat 
+- dovrsit drive
