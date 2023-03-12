@@ -57,6 +57,7 @@ function sendMessage() {
     document.getElementsByClassName('chatbox-message-input')[0].value = ''; // resetiranje textarea
 }
 
+//aa
 function writeMessage() {
 	const today = new Date();
 	// html upisane poruke
