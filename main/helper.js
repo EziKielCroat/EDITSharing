@@ -22,8 +22,19 @@ function errorDisplay(msg) {
 
     errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
     document.getElementsByClassName("container")[0].appendChild(errorHolder);
-
+    
     openModal('modalError');
+}
+
+function successDisplay(msg) {
+    let successHolder = document.createElement("div");
+
+    successHolder.setAttribute("class", "success-holder");
+
+    successHolder.innerHTML = `<div id="successModal" class="modal"><div class="modal-content"><h4>Uspjeh</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
+    document.getElementsByClassName("container")[0].appendChild(successHolder);
+
+    openModal('successModal');
 }
 
 function signOut() {

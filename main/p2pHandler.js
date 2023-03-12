@@ -1,7 +1,7 @@
 
 function p2pHandler(file) {
     // inicijalizacija PeerJS konekcije
-    const peer = new Peer( {debug: 1});
+    const peer = new Peer( {debug: 3});
 
     peer.on('open', (id) => {
         const shortID = generateWord(); // ovo je kratki id koji prikazujemo korisniku
@@ -94,7 +94,7 @@ function predSpajanjeKorisnika() { // prije spajanje korisnika moramo izvuci lon
 
 function spojiKorisnika(longID) {
     // inicijalizacija PeerJS konekcije
-    const peer = new Peer({debug: 1});
+    const peer = new Peer({debug: 3});
 
     peer.on('open', () => {
         const conn = peer.connect(longID); // spajanje na longID povućen iz firebasea
