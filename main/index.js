@@ -160,6 +160,7 @@ function s2pMode() {
     inputFunctionsS2P(); // pali funkcije za prozor
 
     document.getElementsByClassName('input-holder')[0].style.display = 'block';
+    showFiles(userID);
 }
 
 

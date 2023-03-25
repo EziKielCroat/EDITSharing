@@ -1,4 +1,7 @@
 
+const userID1 = localStorage.getItem('idkorisnika');
+
+
 // pripremi dokument za slanje
 function s2pHandler(file, ref) {
     const name = new Date() + "-" + file.name
@@ -7,7 +10,9 @@ function s2pHandler(file, ref) {
         contentType:file.type
     }
 
-    const task = ref.child(name).put(file, metadata)
+    // var uploadTask = storageRef.child('images/user1234/file.txt').put(file, metadata);
+
+    const task = ref.child(`${userID1}/${name}`).put(file, metadata)
     
     task.then(snapshot => snapshot.ref.getDownloadURL()).then(url => {
         console.log(url)
@@ -50,4 +55,23 @@ async function shortURL(url) {
     const shortURL = responseData.link;
   
     return shortURL;
+}
+
+
+function showFiles(userID1){
+    let filesArray = []
+    var storageRef = firebase.storage().ref(`${userID1}`);
+    storageRef.listAll().then(function(result) {
+        result.items.forEach(function(imageRef) {
+            
+            let object = imageRef.getMetadata().then(metadata => {filesArray.push(metadata)})
+
+          // And finally display them
+        //   console.log(imageRef)
+        });
+        console.log(filesArray)
+    }).catch(function(error) {
+        // Handle any errors
+    });
+  
 }
