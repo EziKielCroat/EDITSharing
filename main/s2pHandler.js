@@ -57,7 +57,6 @@ async function shortURL(url) {
     return shortURL;
 }
 
-
 async function showFiles(userID1){
     let filesArray = []
     var storageRef =  firebase.storage().ref(`${userID1}`);
@@ -104,4 +103,20 @@ function displayFiles(filesArray) {
         
     }
     document.getElementsByTagName("body")[0].append(divFiles)
+}
+    function showFiles(userID1){
+    let filesArray = []
+    var storageRef = firebase.storage().ref(`${userID1}`);
+    storageRef.listAll().then(function(result) {
+        result.items.forEach(function(imageRef) {
+            
+            let object = imageRef.getMetadata().then(metadata => {filesArray.push(metadata)})
+
+          // And finally display them
+        //   console.log(imageRef)
+        });
+        console.log(filesArray)
+    }).catch(function(error) {
+        // Handle any errors
+    });
 }
