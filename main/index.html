@@ -66,7 +66,7 @@
       <div id="modal1" class="modal">
         <div class="modal-content">
           <h4>Kako naša aplikacija radi?</h4>
-          <p>YouShare je jednostavna web aplikacija koja se služi kao medij za prijenos datoteka i mapa. Kod naše opcije "peer-to-peer" koristimo <a href="https://peerjs.com/">PeerJS</a> on nam omogućuje da maknemo server iz prijenosa podataka te da podatci izravno idu vašoj odabranoj osobi kojoj podjelite svoj ID. </p> 
+          <p>Naša aplikacija radi tako da nakon što korisnik odabere kako želi djeliti svoju datoteku, pojavi mu se prozor gdje mora odabrati kako želi djeliti datoteku. Imamo P2P djeljenje, koje koristi PeerJS library za tu peer-2-peer konekciju. Umjesto ispisvanje dugog PeerID korisniku, u Firebase stavljamo kratki generarirani ID i dugi, tako da je lakše djeliti ID. U S2P djeljenju, vaša datoteka se stavi na Firebase Cloud Storage u zaseban folder, također kad se opet ulogirati u svoj račun možete vidjeti tu datoteku te ponovno ju skinuti.</p> 
         </div>
         <div class="modal-footer">
           <a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a>
@@ -91,10 +91,9 @@
         </div>
       </div>
 
-      <!-- ovdi se appenda input holder s2p i p2p-->
+      <!-- ovdi ide glavni app-->
       <div class="container">
       </div>
-
 
       <!-- chat toggle za p2p-->
       <div class="chatbox-wrapper">

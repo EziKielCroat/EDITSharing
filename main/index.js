@@ -141,6 +141,8 @@ function p2pMode() {
     // pali se klikom na p2p opciju u dropdownu (+)
     sharingMode = 'p2p';
 
+    document.getElementsByClassName('container')[0].innerHTML = "";
+
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button> <br>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
@@ -155,6 +157,7 @@ function s2pMode() {
     sharingMode = 's2p';
 
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
+    inputHolder.classList.add("inline");
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
 
     inputFunctionsS2P(); // pali funkcije za prozor

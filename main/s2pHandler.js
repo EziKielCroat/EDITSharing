@@ -15,13 +15,13 @@ function s2pHandler(file, ref) {
     const task = ref.child(`${userID1}/${name}`).put(file, metadata)
     
     task.then(snapshot => snapshot.ref.getDownloadURL()).then(url => {
-        console.log(url)
-        successDisplay('Uspješan prijenos datoteke', url);
+        console.log(url);
+        successDisplayBitly('Uspješan prijenos datoteke', url);
     });
 }
 
 // prikazuje sve u modalu
-function successDisplay(msg, url) {
+function successDisplayBitly(msg, url) {
     let successDisplay = document.createElement('div');
     shortURL(url).then(shortURL => {
         successDisplay.setAttribute('class', 'success-display')
@@ -32,7 +32,7 @@ function successDisplay(msg, url) {
                 dismissible: false
             });
             instance.open();
-    }).catch(error => {console.log(error);});
+    }).catch(error => {errorDisplay(error);});
 }
 
 // bitly implementacija, sa njihove dokumentacije
@@ -65,42 +65,65 @@ async function showFiles(userID1){
         result.items.forEach(function (imageRef) {
             let downloadURLForFile;
             imageRef.getDownloadURL().then((v) => { downloadURLForFile = v; })
-            let object =  imageRef.getMetadata().then(metadata => { metadata.downloadURL = downloadURLForFile
+            imageRef.getMetadata().then(metadata => { metadata.downloadURL = downloadURLForFile
              filesArray.push(metadata)
             }).then(() => { num === filesArray.length ? displayFiles(filesArray): ""})
-            
-          // And finally display them
-        //   console.log(imageRef)
         });
  
     
     }).catch(function(error) {
-        // Handle any errors
+        errorDisplay(error);
     });
     
 }
 
 function displayFiles(filesArray) {
-    let divFiles = document.createElement("div")
-    divFiles.setAttribute("class", "divFiles")
+    const divFiles = document.createElement("div");
+    divFiles.setAttribute("class", "divFiles");
+    divFiles.classList.add("inline");
     
     for (let i = 0; i < filesArray.length; i++){
-        console.log(filesArray[i])
+        let headingText = filesArray[i].name.split("--")[1];
+        let sizeText = Math.floor((filesArray[i].size) / 1024)+"KB";
+        let downloadURL = filesArray[i].downloadURL;
 
-        let fileHolder = document.createElement("div")
-        fileHolder.setAttribute("class", "driveFileHolder")
+        const fileHolder = document.createElement("div");
 
-        let heading = document.createElement("h3")
-        heading.innerText = filesArray[i].name.split("--")[1]
+        fileHolder.setAttribute("class", "driveFileHolder");
+        fileHolder.classList.add('downloadHover');
+        fileHolder.setAttribute('title', headingText);
 
-        let sizeParagraph = document.createElement("p")
-        sizeParagraph.innerText = Math.floor((filesArray[i].size) / 1024)+"KB"
+        const heading = document.createElement("h3");
+        heading.innerText = headingText;
 
-
-        fileHolder.append(heading)
-        fileHolder.append(sizeParagraph)
-        divFiles.append(fileHolder)
+        const sizeParagraph = document.createElement("p");
         
+        if(sizeText == "0KB") {
+            sizeParagraph.innerText = "?? KB"
+        } else {
+            sizeParagraph.innerText = sizeText
+        }
+
+        if(downloadURL) {
+            fileHolder.addEventListener('click', () => { // download handleing
+                location.href = downloadURL;
+            });
+        } else {
+            console.error(`Preuzimanje dokumenta ${headingText} nije dostupno.`)
+        }
+
+        if(heading.innerText.length < 25) {
+            fileHolder.append(heading);
+            fileHolder.append(sizeParagraph);
+            divFiles.append(fileHolder);
+        } else {
+            let newHeading = truncate(heading.innerText, 20); // iskreno nemogu puno objasnit.. smanjiva ako je predug string
+            heading.innerText= newHeading;
+
+            fileHolder.append(heading);
+            fileHolder.append(sizeParagraph);
+            divFiles.append(fileHolder);
+        }
     }
-    document.getElementsByTagName("body")[0].append(divFiles)
+    document.getElementsByClassName("container")[0].append(divFiles);
 }

@@ -9,6 +9,11 @@
 .container {
     width: 100%;
     height: auto;
+	float: left;
+}
+
+.inline {
+	float:left; 
 }
 
 #drag-drop {
@@ -70,6 +75,45 @@
 
 .hidden-element {
     display: none;
+}
+
+.divFiles {
+	height: auto;
+	width: fit-content;
+	border: 1px solid #bbb;
+	border-radius: 10px;
+	padding:1em;
+	overflow: hidden;
+	margin-top: 5rem;
+	margin-left: 3em;
+}
+
+.driveFileHolder {
+	float:left;
+	height: 8em;
+	width:8em;
+	border: 2px dotted #bbb;
+	border-radius: 10px;
+	text-align: center;
+	line-height: 8em;
+	margin-right: 1em;
+	word-wrap: break-word;
+	overflow-wrap: break-word;
+}
+
+.driveFileHolder h3{
+	position: relative;
+	font-size: medium;
+	top: 40px;
+}
+
+.driveFileHolder p{
+	font-size: small;
+}
+
+.downloadHover:hover {
+	cursor:pointer;
+	background-color: #d1cfcf;
 }
 
 /* chat */

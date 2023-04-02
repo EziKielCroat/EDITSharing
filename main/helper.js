@@ -47,6 +47,10 @@ function resetInput() {
     document.getElementById('submitButton').classList.add('disabled');    
 }
 
+function truncate(str, n){
+    return (str.length > n) ? str.slice(0, n-1) + '..' : str;
+};
+
 function copyToClipboard() {
   const text = document.getElementById("shortURL").innerText;
   const textarea = document.createElement('textarea');
