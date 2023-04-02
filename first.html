@@ -25,22 +25,8 @@
     <nav>
       <div class="nav-wrapper red lighten-1">
         <a href="#" class="brand-logo">YouShare</a>
-        <ul id="nav-mobile" class="right hide-on-med-and-down">
-          <li><a onclick="openModal('modal1')" id="questionModal">?</a></li>
-        </ul>
       </div>
     </nav>
-
-    <!-- modal za objasnjenje -->
-    <div id="modal1" class="modal">
-      <div class="modal-content">
-        <h4>Kako naša aplikacija radi?</h4>
-        <p>YouShare je jednostavna web aplikacija koja se služi kao medij za prijenos datoteka i mapa. Kod naše opcije "peer-to-peer" koristimo <a href="https://peerjs.com/">PeerJS</a> on nam omogućuje da maknemo server iz prijenosa podataka te da podatci izravno idu vašoj odabranoj osobi kojoj podjelite svoj ID. Kod druge opcije "server-to-peer" koristimo <a href="https://firebase.com/">Firebase</a> za prijenos podataka na server i prikaz tih podataka "iz oblaka".</p> 
-      </div>
-      <div class="modal-footer">
-        <a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a>
-      </div>
-    </div>
 
     <!-- login/Register dio-->
     <div class="container">
@@ -48,7 +34,8 @@
       <input type="text" id="username" name="username"><br>
       <label for="password">Lozinka:</label><br>
       <input type="password" id="password" name="password">
-      <button class="waves-effect red darken-1 btn" id="registerButton">Registriraj se</button> <br> <p>ili</p> <br>
+      <button class="waves-effect red darken-1 btn" id="registerButton">Registriraj se</button> <br>
+      <p>ili</p>
       <button class="waves-effect red darken-1 btn" id="loginButton">Ulogiraj se</button>
     </div>
 

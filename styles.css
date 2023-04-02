@@ -1,9 +1,10 @@
+
 .container {
-    display: block;
-    height: 10rem !important;
-    width: 60% !important;
+    height: fit-content;
+    width: 40em;
+    padding:1em;
 }
 
-#questionModal {
-    font-size: large !important;
+.brand-logo {
+    padding-left: 1em !important;
 }
