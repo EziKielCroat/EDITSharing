@@ -16,6 +16,10 @@
 	float:left; 
 }
 
+.brand-logo {
+	padding-left: 1em !important;
+}
+
 #drag-drop {
     padding: 10px;
     border: 2px dashed #bbb;
@@ -119,13 +123,10 @@
 /* chat */
 
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
-*,
-*::before,
-*::after {
+*,*::before,*::after {
   box-sizing: border-box;
 }
 
-/* defaultne margine micen */
 body,h1,h2,h3,h4,p,figure,blockquote,dl,dd {
   margin: 0;
 }
@@ -146,11 +147,6 @@ body {
 
 a:not([class]) {
   text-decoration-skip-ink: auto;
-}
-
-img,picture {
-  max-width: 100%;
-  display: block;
 }
 
 input,button,textarea,select {
@@ -201,7 +197,7 @@ input,button,textarea,select {
 	align-items: center;
 	border-radius: 50%;
 	cursor: pointer;
-    opacity: 0.4;
+    opacity: 0.7;
 	transition: .2s;
 }
 
@@ -373,7 +369,7 @@ input,button,textarea,select {
 	text-align: center;
 }
 
-@media screen and (max-width: 576px) { /* skinija sa gpt*/
+@media screen and (max-width: 576px) {
 	.chatbox-message-wrapper {
 		width: calc(100vw - 2rem);
 	}

@@ -1,31 +1,30 @@
 
 const userID1 = localStorage.getItem('idkorisnika');
 
-
 // pripremi dokument za slanje
 function s2pHandler(file, ref) {
-    const name = new Date() + "--" + file.name
+    // ime datoteke uz timestamp da izbjegnemo duplikate(mozda morat maknit)
+    const name = new Date() + "--" + file.name;
 
     const metadata = {
         contentType:file.type
     }
 
-    // var uploadTask = storageRef.child('images/user1234/file.txt').put(file, metadata);
-
-    const task = ref.child(`${userID1}/${name}`).put(file, metadata)
+    const task = ref.child(`${userID1}/${name}`).put(file, metadata);
     
     task.then(snapshot => snapshot.ref.getDownloadURL()).then(url => {
-        console.log(url);
+        // console.log(url);
         successDisplayBitly('Uspješan prijenos datoteke', url);
     });
 }
 
-// prikazuje sve u modalu
+// prikazuje skraceni bitly url u modalu
+// moglo bi se reformatirat
 function successDisplayBitly(msg, url) {
     let successDisplay = document.createElement('div');
     shortURL(url).then(shortURL => {
         successDisplay.setAttribute('class', 'success-display')
-            successDisplay.innerHTML = `<div id="successDisplay" class="modal"><div class="modal-content"><h4>${msg}</h4> <p>Želiš li podjeliti datoteku? Samo podjeli ovaj link:</p><p><span id="shortURL">${shortURL}</span><button  onclick="copyToClipboard()"class="btn waves-effect red lighten-1" type="submit" name="action" id="copyClipboardButton"><i class="material-icons right">content_paste</i></button></p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+            successDisplay.innerHTML = `<div id="successDisplay" class="modal"><div class="modal-content"><h4>${msg}</h4> <p>Želiš li podjeliti datoteku? Samo podjeli ovaj link:</p><p><span id="shortURL">${shortURL}</span> <br /><button  onclick="copyToClipboard()"class="btn waves-effect red lighten-1" type="submit" name="action" id="copyClipboardButton"><i class="material-icons right">content_paste</i></button></p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
             document.getElementsByClassName("container")[0].appendChild(successDisplay);
             const elem = document.getElementById('successDisplay');
             const instance = M.Modal.init(elem, {
@@ -57,40 +56,45 @@ async function shortURL(url) {
     return shortURL;
 }
 
+// prikazivanje vec uplodanih datoteka vezanih uz korisnika
+// treba se dodat error handleinga...
 async function showFiles(userID1){
-    let filesArray = []
-    var storageRef =  firebase.storage().ref(`${userID1}`);
+    let filesArray = []; // array di se spremaju sve datoteke korisnika
+    let storageRef =  firebase.storage().ref(`${userID1}`); // mjesto gdje se nalaze datoteke vezane uz korisnika(firebase cloud storage)
+
     storageRef.listAll().then(function (result) {
-        let num = result.items.length
+        let num = result.items.length;
+
         result.items.forEach(function (imageRef) {
             let downloadURLForFile;
-            imageRef.getDownloadURL().then((v) => { downloadURLForFile = v; })
-            imageRef.getMetadata().then(metadata => { metadata.downloadURL = downloadURLForFile
-             filesArray.push(metadata)
-            }).then(() => { num === filesArray.length ? displayFiles(filesArray): ""})
+
+            imageRef.getDownloadURL().then((v) => { downloadURLForFile = v; });
+
+            imageRef.getMetadata().then(metadata => {
+                metadata.downloadURL = downloadURLForFile;
+                filesArray.push(metadata);
+            }).then(() => { num === filesArray.length ? displayFiles(filesArray): ''});
         });
- 
-    
     }).catch(function(error) {
         errorDisplay(error);
     });
-    
 }
 
+// prikazuje datoteke iz showFiles u DOM
 function displayFiles(filesArray) {
-    const divFiles = document.createElement("div");
-    divFiles.setAttribute("class", "divFiles");
+    const divFiles = document.createElement('div');
+    divFiles.setAttribute('class', "divFiles");
     divFiles.classList.add("inline");
     
     for (let i = 0; i < filesArray.length; i++){
-        let headingText = filesArray[i].name.split("--")[1];
-        let sizeText = Math.floor((filesArray[i].size) / 1024)+"KB";
+        let headingText = filesArray[i].name.split('--')[1];
+        let sizeText = Math.floor((filesArray[i].size) / 1024)+'KB';
         let downloadURL = filesArray[i].downloadURL;
 
-        const fileHolder = document.createElement("div");
+        const fileHolder = document.createElement('div');
 
-        fileHolder.setAttribute("class", "driveFileHolder");
-        fileHolder.classList.add('downloadHover');
+        fileHolder.setAttribute('class', "driveFileHolder");
+        fileHolder.classList.add("downloadHover");
         fileHolder.setAttribute('title', headingText);
 
         const heading = document.createElement("h3");
@@ -98,26 +102,29 @@ function displayFiles(filesArray) {
 
         const sizeParagraph = document.createElement("p");
         
-        if(sizeText == "0KB") {
-            sizeParagraph.innerText = "?? KB"
+        // ako velicina datoteke nije dostupna
+        if(sizeText == '0KB') {
+            sizeParagraph.innerText = '?? KB'
         } else {
             sizeParagraph.innerText = sizeText
         }
 
+        // ako nam neda downloadURL datoteke
         if(downloadURL) {
-            fileHolder.addEventListener('click', () => { // download handleing
+            fileHolder.addEventListener('click', () => {
                 location.href = downloadURL;
             });
         } else {
-            console.error(`Preuzimanje dokumenta ${headingText} nije dostupno.`)
+            console.error(`Preuzimanje dokumenta ${headingText} nije dostupno.`); // ovo nije nepouzadnost aplikacije vec ponekad samo nam neda downloadurl datoteke #notourfault
         }
 
+        // da tekst nije predug(da nema text overflow)
         if(heading.innerText.length < 25) {
             fileHolder.append(heading);
             fileHolder.append(sizeParagraph);
             divFiles.append(fileHolder);
         } else {
-            let newHeading = truncate(heading.innerText, 20); // iskreno nemogu puno objasnit.. smanjiva ako je predug string
+            let newHeading = truncate(heading.innerText, 20);
             heading.innerText= newHeading;
 
             fileHolder.append(heading);
@@ -125,5 +132,8 @@ function displayFiles(filesArray) {
             divFiles.append(fileHolder);
         }
     }
-    document.getElementsByClassName("container")[0].append(divFiles);
+    document.getElementsByClassName('container')[0].append(divFiles);
 }
+
+// pomocne funckije se nalaze u helper.js
+// pomocne funkcije koristene u ovoj datoteci su: errorDisplay, truncate, copyToClipboard

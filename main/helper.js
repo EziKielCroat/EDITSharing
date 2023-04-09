@@ -1,4 +1,5 @@
 
+// otvara modal opisan u parametru funkcije
 function openModal(modal) {
     const elem = document.getElementById(modal);
     const instance = M.Modal.init(elem, {
@@ -7,6 +8,7 @@ function openModal(modal) {
     instance.open();
 }
 
+// zatvara modal opisan u parametru funkcije
 function closeModal(modal) {
     const elem = document.getElementById(modal);
     const instance = M.Modal.init(elem, {
@@ -15,16 +17,19 @@ function closeModal(modal) {
     instance.close();
 }
 
+// prikazuje modal pogreske sa porukom pogreske definirana u parametru
 function errorDisplay(msg) {
     let errorHolder = document.createElement("div");
 
-    errorHolder.setAttribute("class", "error-holder");
+    errorHolder.setAttribute('class', "error-holder");
 
     errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
     document.getElementsByClassName("container")[0].appendChild(errorHolder);
     
     openModal('modalError');
 }
+
+// prikazuje modal uspjeha sa porukom uspjeha
 
 function successDisplay(msg) {
     let successHolder = document.createElement("div");
@@ -37,20 +42,24 @@ function successDisplay(msg) {
     openModal('successModal');
 }
 
+// mice korisnikov id iz localStorage i vraca na login, "izlogira" korisnika
 function signOut() {
     localStorage.removeItem('idkorisnika');
     window.location.href = '/first.html';
 }
 
+// resetira input prozor na submit
 function resetInput() {
     document.getElementById("drag-drop").innerText = "Stisni ili ubaci datoteku koju želiš podjeliti";
     document.getElementById('submitButton').classList.add('disabled');    
 }
 
+//smanjuje rijec oviseci jel duga
 function truncate(str, n){
     return (str.length > n) ? str.slice(0, n-1) + '..' : str;
 };
 
+//kopira text u clipboard
 function copyToClipboard() {
   const text = document.getElementById("shortURL").innerText;
   const textarea = document.createElement('textarea');
@@ -62,6 +71,7 @@ function copyToClipboard() {
   document.body.removeChild(textarea);
 }
 
+// generira random rijec(to koristimo za krati id za spajanje korisnika na p2p)
 function generateWord() {
     const numbers = '0123456789';
     const upperCaseLetters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -84,6 +94,7 @@ function generateWord() {
     return shuffledWord;
 }
 
+// cekiranje za vec uzeto ime racuna
 function checkForDuplicateUser(username) {
     return db.collection('Korisnici').where('username', '==', username).get().then(querySnapshot => {
         console.log(querySnapshot.size);
@@ -91,7 +102,8 @@ function checkForDuplicateUser(username) {
       });
 }
 
-function promjeniIme() { // mjenja ime korisnika ulogiranog
+// mjenja ime korisnika ulogiranog
+function promjeniIme() { 
     let usernameNew = document.getElementById('promjenaImena').value;
 
     if (usernameNew.length > 0) {
@@ -101,7 +113,7 @@ function promjeniIme() { // mjenja ime korisnika ulogiranog
         document.getElementById('promjenaImena').value = '';
 
     } else {
-        errorDisplay('Upišite validno ime');
+        errorDisplay('Upišite validno korisničko ime');
         document.getElementById('promjenaImena').value = '';
     }
 }
@@ -116,13 +128,13 @@ function promjeniLozinku() {
         });
         document.getElementById('promjenaLozinke').value = '';
     } else {
-        errorDisplay('Upišite validno prezime');
+        errorDisplay('Upišite validnu lozinku');
         document.getElementById('promjenaLozinke').value = '';
     }
 }
 
-
-function getMimeType(fileName) { // ako datoteka nema tip usere se sve pa ono mali fiks
+//puno problema sa skidanjem datoteke bez tipa, ovo je samo mjera opreze u p2p postupku
+function getMimeType(fileName) {
     const types = {
         ".aac": "audio/aac",
         ".abw": "application/x-abiword",

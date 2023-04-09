@@ -83,3 +83,6 @@ function glavnaAplikacija(idKorisnika) {
 
     window.location.href = '/main/index.html'; // redirect na glavni app
 }
+
+// sve pomocne funkcije se nalaze u ./main/helper.js
+// pomocne funkcije koristene u ovoj datoteci su: errorDisplay, checkForDuplicateUser
