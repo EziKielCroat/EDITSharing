@@ -4,7 +4,9 @@ const userID1 = localStorage.getItem('idkorisnika');
 // pripremi dokument za slanje
 function s2pHandler(file, ref) {
     // ime datoteke uz timestamp da izbjegnemo duplikate(mozda morat maknit)
-    const name = new Date() + "--" + file.name;
+    // posto od 10 000
+    const name = Date.now() + "--" + file.name;
+    console.log(name);
 
     const metadata = {
         contentType:file.type
@@ -67,6 +69,8 @@ async function showFiles(userID1){
 
         result.items.forEach(function (imageRef) {
             let downloadURLForFile;
+
+            // mozda se runna u isto vrime
 
             imageRef.getDownloadURL().then((v) => { downloadURLForFile = v; });
 
