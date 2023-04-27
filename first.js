@@ -12,16 +12,25 @@ const firebaseConfig = {
 
 const app = firebase.initializeApp(firebaseConfig);
 const db = app.firestore();
-
 const loginButton = document.getElementById('loginButton');
+let mode = "login"; // ovo koristin da kad korisnik stisne enter mogu vidit koji je mod tj znan koju funkciju opalit za register/login
 
 // gleda jel korisnik vec ulogiran, ako je prosljedi na glavni app
-
 window.onload = function () {
     if (localStorage.getItem('idkorisnika') !== null) {
         window.location.href = '/main/index.html';
     }
 }
+
+window.addEventListener('keypress', (e) => {
+    if(e.key == 'Enter') {
+        if(mode == 'login') {
+            loginButton.dispatchEvent(new Event('click'));
+        } else if(mode == 'register'){
+            registerButton.dispatchEvent(new Event('click'));
+        }
+    }
+})
 
 // Ulogiranje korisnika
 
@@ -88,22 +97,22 @@ document.getElementById("switchRegister").addEventListener("click", () => {
 })
 
 function switchToRegister() {
-    console.log("switchToRegister")
-    let body = document.getElementsByClassName("container")[0];
+    let body = document.getElementsByClassName('container')[0];
+    mode = "register";
 
     body.innerHTML = `<h4>Napravite novi račun</h4><label for="username">Korisničko ime:</label><br><input type="text" id="username" name="username"><br><label for="email">Vaš kontakt email:</label><br><input type="email" id="email" name="email"><br><label for="dob">Datum rođenja:</label><br><input type="date" min="1900-01-01" id="dob" name="dob"><br><label for="password">Lozinka:</label><br><input type="password" id="password" name="password"><br><button class="waves-effect red darken-1 btn" id="registerButton">Napravi račun</button> <br><a class="register-link" id="switchLogin">Imaš korisnički račun? Ulogiraj se!</a>`
 
-    document.getElementById("switchLogin").addEventListener("click", () => {
+    document.getElementById('switchLogin').addEventListener('click', () => {
         switchToLogin();
     })
 }
 
 function switchToLogin() {
-    console.log("switchToLogin");
-    let body = document.getElementsByClassName("container")[0];
+    let body = document.getElementsByClassName('container')[0];
+    mode = "login"
 
     body.innerHTML = `<h4>Ulogiraj se u svoj račun</h4><label for="username">Korisničko ime:</label><br><input type="text" id="username" name="username"><br><label for="password">Lozinka:</label><br><input type="password" id="password" name="password"><button class="waves-effect red darken-1 btn" id="loginButton">Ulogiraj se</button> <br><a class="register-link" id="switchRegister">Nemaš korisnički račun? Napravi svoj!</a>`;
-    document.getElementById("switchRegister").addEventListener("click", () => {
+    document.getElementById('switchRegister').addEventListener('click', () => {
         switchToRegister();
     })
 }
@@ -111,7 +120,7 @@ function switchToLogin() {
 function glavnaAplikacija(idKorisnika) {
     localStorage.setItem('idkorisnika', idKorisnika); // u localstorage je spremljen id korisnika koji se posli korsiti za pregled jel korisnik ulogiran
 
-    window.location.href = '/main/index.html'; // redirect na glavni app
+    window.location.href = "/main/index.html"; // redirect na glavni app
 }
 
 // sve pomocne funkcije se nalaze u ./main/helper.js
