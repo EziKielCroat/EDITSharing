@@ -23,7 +23,7 @@ function errorDisplay(msg) {
 
     errorHolder.setAttribute('class', "error-holder");
 
-    errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
+    errorHolder.innerHTML = `<div id="modalError" class="modal"><div class="modal-content"><h4>Pogreška</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-#757575 grey darken-1 btn-flat">Dobro</a></div></div>`
     document.getElementsByClassName("container")[0].appendChild(errorHolder);
     
     openModal('modalError');
@@ -36,7 +36,7 @@ function successDisplay(msg) {
 
     successHolder.setAttribute("class", "success-holder");
 
-    successHolder.innerHTML = `<div id="successModal" class="modal"><div class="modal-content"><h4>Uspjeh</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-red btn-flat">Dobro</a></div></div>`
+    successHolder.innerHTML = `<div id="successModal" class="modal"><div class="modal-content"><h4>Uspjeh</h4><p>${msg}</p> </div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-#757575 grey darken-1 btn-flat">Dobro</a></div></div>`
     document.getElementsByClassName("container")[0].appendChild(successHolder);
 
     openModal('successModal');

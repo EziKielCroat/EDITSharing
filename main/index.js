@@ -141,7 +141,7 @@ function p2pMode() {
 
     document.getElementsByClassName('container')[0].innerHTML = "";
 
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect red lighten-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button> <br>'
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podijeliti</div><button class="btn waves-effect #757575 grey darken-1 disabled" type="submit" name="action" id="submitButton">Dijeli<i class="material-icons right">send</i></button><br><p>ili</p><button class="btn waves-effect #757575 grey darken-1" type="submit" name="action" id="connectButton">Spoji se s drugima!</button> <br>'
     document.getElementsByClassName('container')[0].appendChild(inputHolder);
 
     inputFunctionsP2P(); // pali funkcije za prozor
@@ -154,7 +154,7 @@ function s2pMode() {
     // pali se klikom na s2p opciju u dropdownu (+)
     sharingMode = "s2p";
 
-    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podjeliti</div><button class="btn waves-effect red lighten-1 disabled" type="submit" name="action" id="submitButton">Djeli<i class="material-icons right">send</i></button>'
+    inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podijeliti</div><button class="btn waves-effect #757575 grey darken-1 disabled" type="submit" name="action" id="submitButton">Dijeli<i class="material-icons right">send</i></button>'
     inputHolder.classList.add("inline");
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
 
@@ -169,7 +169,7 @@ function postaviSpajanjeModal() {
     // modal za spajanje dvi osobne, odavde uzimamo kratki id.
     let connectionModal2 = document.createElement("div");
     connectionModal2.setAttribute('class', "connection-modal");
-    connectionModal2.innerHTML = `<div id="modalConnection2" class="modal"><div class="modal-content"><h4>Početak spajanja</h4><p>Kako bi uspostavili konekciju između druge osobe, mora te upisat ID koji su vam poslali. Nakon što upišete ID i stisnete Spoji se gumb, zatvoriti će se modal I moći će te odabrati želi te li skinitu datoteku. U desnom kutu imate opciju izmjenjivanja poruka između druge osobe također preko peer to peer protokola.</p> <input id="upisaniID" placeholder="Vaš ID ovdje.."><button class="btn waves-effect waves-green red lighten-1" type="submit" name="action" id="submitIDButton" onclick="predSpajanjeKorisnika();">Spoji se</button></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+    connectionModal2.innerHTML = `<div id="modalConnection2" class="modal"><div class="modal-content"><h4>Početak spajanja</h4><p>Kako bi prihvatili datoteku od druge osobe, morate upisati <i>jedinstveni ključ (ID)</i> kojega ste dobili od primatelja. Nakon što ga upišete pritisnite na gumb <i><u>Spoji se</u></i>, tada će se zatvoriti ovaj prozor i moći ćete odabrati želite li preuzeti datoteku. Uz dijeljenje, u desnom kutu imate opciju <i>Chat</i>-a s pošiljateljem.</p> <input id="upisaniID" placeholder="Vaš ID ovdje.."><button class="btn waves-effect waves-green #757575 grey darken-1" type="submit" name="action" id="submitIDButton" onclick="predSpajanjeKorisnika();">Spoji se</button></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
     document.getElementsByClassName("container")[0].appendChild(connectionModal2);
     openModal('modalConnection2');
 }

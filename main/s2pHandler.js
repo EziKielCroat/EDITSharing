@@ -26,7 +26,7 @@ function successDisplayBitly(msg, url) {
     let successDisplay = document.createElement('div');
     shortURL(url).then(shortURL => {
         successDisplay.setAttribute('class', 'success-display')
-            successDisplay.innerHTML = `<div id="successDisplay" class="modal"><div class="modal-content"><h4>${msg}</h4> <p>Želiš li podjeliti datoteku? Samo podjeli ovaj link:</p><p><span id="shortURL">${shortURL}</span> <br /><button  onclick="copyToClipboard()"class="btn waves-effect red lighten-1" type="submit" name="action" id="copyClipboardButton"><i class="material-icons right">content_paste</i></button></p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+            successDisplay.innerHTML = `<div id="successDisplay" class="modal"><div class="modal-content"><h4>${msg}</h4> <p>Želiš li podijeliti datoteku? Samo podijeli ovu poveznicu:</p><p><span id="shortURL">${shortURL}</span> <br /><button  onclick="copyToClipboard()"class="btn waves-effect #757575 grey darken-1" type="submit" name="action" id="copyClipboardButton"><i class="material-icons right">content_paste</i></button></p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
             document.getElementsByClassName("container")[0].appendChild(successDisplay);
             const elem = document.getElementById('successDisplay');
             const instance = M.Modal.init(elem, {

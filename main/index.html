@@ -44,7 +44,7 @@
 
       <!-- desktop navbar --> 
       <nav>
-        <div class="nav-wrapper red lighten-1">
+        <div class="nav-wrapper #757575 grey darken-1">
           <a href="#!" class="brand-logo">YouShare</a>
           <a href="#" data-target="mobile-demo" class="sidenav-trigger"><i class="material-icons">menu</i></a>
           <ul class="right hide-on-med-and-down abeceda"><!-- button desktop --> 
@@ -65,8 +65,14 @@
       <!-- modal za objasnjenje --> 
       <div id="modal1" class="modal">
         <div class="modal-content">
-          <h4>Kako naša aplikacija radi?</h4>
-          <p>Naša aplikacija radi tako da nakon što korisnik odabere kako želi djeliti svoju datoteku, pojavi mu se prozor gdje mora odabrati kako želi djeliti datoteku. Imamo P2P djeljenje, koje koristi PeerJS library za tu peer-2-peer konekciju. Umjesto ispisvanje dugog PeerID korisniku, u Firebase stavljamo kratki generarirani ID i dugi, tako da je lakše djeliti ID. U S2P djeljenju, vaša datoteka se stavi na Firebase Cloud Storage u zaseban folder, također kad se opet ulogirati u svoj račun možete vidjeti tu datoteku te ponovno ju skinuti.</p> 
+          <h4>Kako radi naša aplikacija?</h4>
+          <p>Naša aplikaciju nudi dva načina prijenosa datoteka. Pritiskom na gumb + birate između <i>P2P</i> i <i>S2P</i> dijeljenja.</p>
+          <br>
+          <p><strong>Peer-to-peer <i>(P2P)</i></strong>  dijeljenje nudi prijenos datoteka između dva udaljena računala koristeći tehnologiju <i>PeerJS</i>-a. Ukoliko želite poslati datoteku, prvo ju morate prenijeti na našu stranicu te zatim stisnuti gumb <i><u>Spoji se s drugima</u></i>. Nakon toga dobivate jedinstveni ključ <i><u>(ID)</u></i> kojega šaljete primatelju datoteke. Ukoliko primate datoteku, pritiskom na gumb <i><u>Spoji se s drugima</u></i> upisujete ključ kojega ste dobili od pošiljatelja te tako pristupate datoteci. Uz taj način dijeljenja nudimo i uslugu <i>Chat</i>-a između pošiljatelja i primatelja. </p>
+          <br>
+          <p><strong>Server-to-peer <i>(S2P)</i></strong> je način pohrane osobnih datoteka u oblak koristeći tehnologiju <i>Firebase</i>-a od tvrtke <i>Google</i>. Sve što morate je <u>prenijeti datoteku</u> na našu stranicu da bi ona ostala na oblaku kojemu samo Vi možete pristupiti putem vašeg korisničkog računa. Pri sljedećem korištenju naše stranice vidjet ćete tu datoteku sa svojim ostalim datotekama u S2P djelu te ju možete ponovno preuzeti na osobno računalo jednostavnim <u>pritiskom</u> na nju. Osim što se prijenosom datoteke ona pohranjuje u oblak, dobivate i <u>jedinstvenu poveznicu za preuzimanje</u> te datoteke ukoliko ju trebate  dalje poslati. </p>
+          <br>
+          <p><strong>Uživajte u dijeljenju!</strong></p> 
         </div>
         <div class="modal-footer">
           <a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a>
@@ -79,12 +85,12 @@
           <h4>Postavke računa</h4>
           <label for="promjenaImena">Promjeni korisničko ime:</label>
           <input type="text" id="promjenaImena" name="promjenaImena" autocomplete="off">
-          <button onclick="promjeniIme()" id="promjeniIme" class="waves-effect red darken-1 btn">Promjeni</button> <br>
+          <button onclick="promjeniIme()" id="promjeniIme" class="waves-effect #757575 grey darken-1">Promjeni</button> <br>
           <label for="promjenaLozinke">Promjeni korisničku lozinku:</label>
           <input type="password" id="promjenaLozinke" name="promjenaLozinke" autocomplete="off">
-          <button onclick="promjeniLozinku()" id="promjenaLozinke" class="waves-effect red darken-1 btn">Promjeni</button> <br>
+          <button onclick="promjeniLozinku()" id="promjenaLozinke" class="waves-effect #757575 grey darken-1 btn">Promjeni</button> <br>
           <br>
-          <button class="waves-effect red darken-1 btn" id="signOut" onclick="signOut()">Odjava</button> 
+          <button class="waves-effect #757575 grey darken-1 btn" id="signOut" onclick="signOut()">Odjava</button> 
           </div>
         <div class="modal-footer">
           <a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a>

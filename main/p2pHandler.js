@@ -20,13 +20,13 @@ function p2pHandler(file) {
 
             connectionModal.setAttribute('class', 'connection-modal');
             connectionModal.setAttribute('id', 'connection-modal');
-            connectionModal.innerHTML = `<div id="modalConnection" class="modal"><div class="modal-content"><h4>Početak djeljenja</h4><p>Kako bi ste uspostavili konekciju između druge osobe, mora te im prosljediti svoj ID. Nakon toga, osobi će se pokazati žele li primiti datoteku koju šaljete. Molimo Vas da ne zatvarate prozor jer će prekinuti vašu konekciju.</p> <p>Vaš ID: ${shortID}</p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
+            connectionModal.innerHTML = `<div id="modalConnection" class="modal"><div class="modal-content"><h4>Početak djeljenja</h4><p>Kako bi ste uspostavili dijeljenje između Vas i druge osobe, morate poslati svoj <i>jedinstveni ključ (ID)</i>. Molimo Vas da ne zatvarate ovaj prozor dok ne želite prekinuti dijeljenje.</p> <p><strong>Vaš ID:</strong> ${shortID}</p></div><div class="modal-footer"><a href="#!" class="modal-close waves-effect waves-green btn-flat">Dobro</a></div></div>`
             document.getElementsByTagName('body')[0].appendChild(connectionModal);
 
             openModal('modalConnection');
 
             let cancelConnection = document.createElement('button');
-            cancelConnection.setAttribute('class', 'btn waves-effect red lighten-1');
+            cancelConnection.setAttribute('class', 'btn waves-effect #757575 grey darken-1');
             cancelConnection.setAttribute('id', 'cancelConnection');
             cancelConnection.innerText = "Otkaži konekciju"
 
@@ -167,7 +167,7 @@ function prikaziDatoteku(data, peer, longID) {
     fileHolder.setAttribute('id', "fileHolder");
 
     // fileholder innerhtml
-    fileHolder.innerHTML = `<div id="drag-drop2">Korisnik vam želi poslati datoteku: ${data.fileName}</div> <button class="btn waves-effect waves-green red lighten-1" id="downloadButton">Preuzmi datoteku</button> <br><button id="cancelConnection" class="btn waves-effect waves-green red lighten-1">Otkaži konekciju</button>`
+    fileHolder.innerHTML = `<div id="drag-drop2">Korisnik vam želi poslati datoteku: ${data.fileName}</div> <button class="btn waves-effect waves-green #757575 grey darken-1" id="downloadButton">Preuzmi datoteku</button> <br><button id="cancelConnection" class="btn waves-effect waves-green #757575 grey darken-1">Otkaži konekciju</button>`
     container.innerHTML = "";
     container.appendChild(fileHolder);
 
