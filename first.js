@@ -26,11 +26,9 @@ window.addEventListener('keypress', (e) => {
     if(e.key == 'Enter') {
         if(mode == 'login') {
             loginButton.dispatchEvent(new Event('click'));
-        } else if(mode == 'register'){
-            registerButton.dispatchEvent(new Event('click'));
         }
     }
-})
+});
 
 // Ulogiranje korisnika
 
@@ -94,13 +92,21 @@ document.getElementById("switchRegister").addEventListener("click", () => {
              errorDisplay("Problem sa provjeravanjem postojanja korisničkog imena:", error);
         });
     });
+
+    window.addEventListener('keypress', (e) => {
+        if(e.key == 'Enter') {
+            if(mode == 'register') {
+                registerButton.dispatchEvent(new Event('click'));
+            }
+        }
+    });
 })
 
 function switchToRegister() {
     let body = document.getElementsByClassName('container')[0];
     mode = "register";
 
-    body.innerHTML = `<h4>Napravite novi račun</h4><label for="username">Korisničko ime:</label><br><input type="text" id="username" name="username"><br><label for="email">E-mail:</label><br><input type="email" id="email" name="email"><br><label for="dob">Datum rođenja:</label><br><input type="date" min="1900-01-01" id="dob" name="dob"><br><label for="password">Lozinka:</label><br><input type="password" id="password" name="password"><br><button class="waves-effect #757575 grey darken-1" id="registerButton">Napravi račun</button> <br><a class="register-link" id="switchLogin">Imaš korisnički račun? Ulogiraj se!</a>`
+    body.innerHTML = `<h4>Napravite novi račun</h4><label for="username">Korisničko ime:</label><br><input type="text" id="username" name="username"><br><label for="email">E-mail:</label><br><input type="email" id="email" name="email"><br><label for="dob">Datum rođenja:</label><br><input type="date" min="1900-01-01" id="dob" name="dob"><br><label for="password">Lozinka:</label><br><input type="password" id="password" name="password"><br><button class="waves-effect #757575 grey darken-1 btn" id="registerButton">Napravi račun</button> <br><a class="register-link" id="switchLogin">Imaš korisnički račun? Ulogiraj se!</a>`
 
     document.getElementById('switchLogin').addEventListener('click', () => {
         switchToLogin();
@@ -111,7 +117,7 @@ function switchToLogin() {
     let body = document.getElementsByClassName('container')[0];
     mode = "login"
 
-    body.innerHTML = `<h4>Ulogiraj se u svoj račun</h4><label for="username">Korisničko ime:</label><br><input type="text" id="username" name="username"><br><label for="password">Lozinka:</label><br><input type="password" id="password" name="password"><button class="waves-effect #757575 grey darken-1" id="loginButton">Ulogiraj se</button> <br><a class="register-link" id="switchRegister">Nemaš korisnički račun? Napravi svoj!</a>`;
+    body.innerHTML = `<h4>Ulogiraj se u svoj račun</h4><label for="username">Korisničko ime:</label><br><input type="text" id="username" name="username"><br><label for="password">Lozinka:</label><br><input type="password" id="password" name="password"><button class="waves-effect #757575 grey darken-1 btn" id="loginButton">Ulogiraj se</button> <br><a class="register-link" id="switchRegister">Nemaš korisnički račun? Napravi svoj!</a>`;
     document.getElementById('switchRegister').addEventListener('click', () => {
         switchToRegister();
     })
