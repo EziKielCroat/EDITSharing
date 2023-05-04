@@ -203,7 +203,7 @@ input,button,textarea,select {
 .chatbox-toggle {
 	width: 100%;
 	height: 100%;
-	background: var(--red);
+	background: #757575;
 	color: var(--white);
 	font-size: 2rem;
 	display: flex;

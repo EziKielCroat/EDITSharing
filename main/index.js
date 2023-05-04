@@ -154,6 +154,8 @@ function s2pMode() {
     // pali se klikom na s2p opciju u dropdownu (+)
     sharingMode = "s2p";
 
+    document.getElementsByClassName('container')[0].innerHTML = "";
+
     inputHolder.innerHTML = '<div id="drag-drop">Stisni ili ubaci datoteku koju želiš podijeliti</div><button class="btn waves-effect #757575 grey darken-1 disabled" type="submit" name="action" id="submitButton">Dijeli<i class="material-icons right">send</i></button>'
     inputHolder.classList.add("inline");
     document.getElementsByClassName("container")[0].appendChild(inputHolder);
