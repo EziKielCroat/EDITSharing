@@ -1,6 +1,6 @@
-# EDITSharing
+# YourShare
 
-EDITSharing is a file-sharing application developed by Luke Bajte and Duje Žižić as a project for the Napredni Tečaj EDIT codeschool. This application leverages Cloud Storage for Firebase, PeerJS, and vanilla JavaScript to provide a peer-to-peer file-sharing experience.
+YourShare is a file-sharing application developed by Luka Bajto and Duje Žižić as a project for the Napredni Tečaj EDIT codeschool. This application leverages Cloud Storage for Firebase, PeerJS, and vanilla JavaScript to provide a peer-to-peer file-sharing experience.
 
 ## Features
 
