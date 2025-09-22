@@ -1,4 +1,8 @@
 # YourShare
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=flat&logo=javascript&logoColor=black)](https://www.javascript.com/)
+[![Firebase](https://img.shields.io/badge/Firebase-FFCA28?style=flat&logo=firebase&logoColor=black)](https://firebase.google.com/)
+[![PeerJS](https://img.shields.io/badge/PeerJS-BEE3F8?style=flat&logo=javascript&logoColor=black)](https://peerjs.com/) </br>
 
 YourShare is a file-sharing application developed by Luka Bajto and Duje Žižić as a project for the Napredni Tečaj EDIT codeschool. This application leverages Cloud Storage for Firebase, PeerJS, and vanilla JavaScript to provide a peer-to-peer file-sharing experience.
 
